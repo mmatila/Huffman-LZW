@@ -1,5 +1,5 @@
 # Huffman coding & Lempel-Ziv-Welch algorithm
 ### Documentation
-[Project documentation]
+[Project specification](https://github.com/mmatila/Huffman-LZW/blob/main/Documentation/definition.md)
 ### Weekly reports
-[Week 1]
+[Week 1](https://github.com/mmatila/Huffman-LZW/blob/main/Documentation/Weekly_reports/week_1.md)
