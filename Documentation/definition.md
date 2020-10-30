@@ -9,11 +9,11 @@ Language used: English
 
 **Huffman coding** and **LZW** are both lossless data compressing algorithms. Goal of the project is to implement a program that takes a text file as an input and compresses it to a noticeably smaller size.
 Main focus is going to be on Huffman and depending on time I have for the course, LZW may or may not be implemented. 
-First prio
+First priority is to have a working program that **actually** compresses the given data properly and then work on optimization.
 
 ## Algorithms and Data structures
 
-In the beginning the program will be using built-in data structures of Java, such as Priority Queue. Later on they will be built from scratch.
+In the beginning the program will be using built-in data structures of Java, such as Priority Queue. Later on they will be built from scratch. 
 
 #### Huffman
 
@@ -25,6 +25,8 @@ In the beginning the program will be using built-in data structures of Java, suc
   - For building the Huffman tree
 
 #### LZW
+
+- For these I haven't really looked into but will update later on.
 
 
 
