@@ -1,4 +1,4 @@
-# Project definition
+# Project specification
 This is a course project for "Aineopintojen harjoitustyö: Tietorakenteet ja algoritmit (TKT20010)"
 
 Study programme: "Tietojenkäsittelytieteen kandiohjelma"
@@ -32,3 +32,11 @@ In the beginning the program will be using built-in data structures of Java, suc
 
 ## Time and space complexity analysis
 In an optimal situation **Huffman coding** would have a time complexity of **O(n log n)** and **LZW** would have a time complexity of **O(n)**.
+
+## Sources
+
+Wikipedia (2020), "Huffman coding", viewed 30.10.2020, https://en.wikipedia.org/wiki/Huffman_coding
+
+Wikipedia (2020), "Lempel-Ziv-Welch", viewed 30.10.2020, https://en.wikipedia.org/wiki/Lempel%E2%80%93Ziv%E2%80%93Welch
+
+Kamil Mýsliwiec (2017), "Implementation of Huffman Coding Algorithm with Binary Trees", viewed 30.10.2020, https://kamilmysliwiec.com/implementation-of-huffman-coding-algorithm-with-binary-trees
