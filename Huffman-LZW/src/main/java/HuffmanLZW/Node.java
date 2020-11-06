@@ -9,10 +9,18 @@ package HuffmanLZW;
  *
  * @author mmatila
  */
-public class Main {
+public class Node {
+    char character;
+    int frequency;
+    Node left;
+    Node right;
     
-    public static void main (String[] args) {
-        System.out.println("Hello World!");
+    public Node() {
+ 
     }
     
+    @Override
+    public String toString() {
+        return this.character + ": " + this.frequency;
+    }
 }
