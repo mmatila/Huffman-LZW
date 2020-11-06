@@ -15,13 +15,51 @@ public class Node {
     Node left;
     Node right;
     
+
+    public Node(char character, int frequency) {
+        this.character = character;
+        this.frequency = frequency;
+    }
+    
     public Node() {
  
     }
     
     /**
      * 
-     * @return Character and its frequency
+     * @return character assigned to this Node
+     */
+    public char getCharacter() {
+        return this.character;
+    }
+    
+    /**
+     * 
+     * @return frequency of the character assigned to this Node
+     */
+    public int getFrequency() {
+        return this.frequency;
+    }
+    
+    /**
+     * 
+     * @return the left child of this Node
+     */
+    public Node getLeft() {
+        return this.left;
+    }
+    
+    /**
+     * 
+     * @return the right child of this Node
+     */
+    public Node getRight() {
+        return this.right;
+    }
+    
+    /**
+     * 
+     * @return String presentation of character and frequency of this Node
      */
     @Override
     public String toString() {

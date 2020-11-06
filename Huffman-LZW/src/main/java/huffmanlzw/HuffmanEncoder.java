@@ -41,7 +41,7 @@ public class HuffmanEncoder {
      */
     public void execute() {
         contentToString();
-        getFrequencies();
+        generateFrequencies();
         generateQueue();
         HuffmanTree tree = new HuffmanTree(getQueue());
         tree.generate();
@@ -54,7 +54,7 @@ public class HuffmanEncoder {
     /**
      * Calculates the frequencies of characters in the given file and saves them to a HashMap
      */
-    public void getFrequencies() {
+    public void generateFrequencies() {
         char[] chars = content.toCharArray();
         for (char character : chars) {
             if (frequencies.containsKey(character)) {
@@ -66,7 +66,7 @@ public class HuffmanEncoder {
     }
 
     /**
-     * Saves the contents of the file to a string
+     * Saves the contents of the file to a string. 
      * Kind of unnecessary but will work on it later
      */
     public void contentToString() {
@@ -120,5 +120,13 @@ public class HuffmanEncoder {
      */
     public PriorityQueue<Node> getQueue() {
         return this.queue;
+    }
+  
+    public String getContent() {
+        return this.content;
+    }
+    
+    public HashMap<Character, Integer> getFrequencies() {
+        return this.frequencies;
     }
 }

@@ -46,7 +46,7 @@ public class HuffmanTree {
     }
 
     /**
-     * Prints a list of all characters and their Huffman codes
+     * Helper function that prints a list of all characters and their Huffman codes
      */
     public void print() {
         HashMap<Character, String> huffmanCodes = new HashMap<>();
@@ -77,5 +77,9 @@ public class HuffmanTree {
         }
 
         return huffmanCodes;
+    }
+    
+    public Node getRoot() {
+        return this.root;
     }
 }
