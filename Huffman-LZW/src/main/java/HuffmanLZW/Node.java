@@ -19,6 +19,10 @@ public class Node {
  
     }
     
+    /**
+     * 
+     * @return Character and its frequency
+     */
     @Override
     public String toString() {
         return this.character + ": " + this.frequency;

@@ -25,24 +25,35 @@ public class HuffmanEncoder {
     private HashMap<Character, Integer> frequencies;
     private PriorityQueue<Node> queue;
 
+    
+    /**
+     * 
+     * @param fileName name to the file to be compressed
+     */
     public HuffmanEncoder(String fileName) {
         this.file = new File(fileName);
         this.content = "";
         this.frequencies = new HashMap<>();
     }
 
+    /**
+     * Method that handles the whole encoding
+     */
     public void execute() {
-        contentToCharacters();
+        contentToString();
         getFrequencies();
         generateQueue();
         HuffmanTree tree = new HuffmanTree(getQueue());
         tree.generate();
         toCodeString(tree);
+        Writer writer = new Writer(codeString);
    
 //        tree.print();
     }
 
-    // Assigns frequencies of characters in the file to a HashMap
+    /**
+     * Calculates the frequencies of characters in the given file and saves them to a HashMap
+     */
     public void getFrequencies() {
         char[] chars = content.toCharArray();
         for (char character : chars) {
@@ -54,9 +65,12 @@ public class HuffmanEncoder {
         }
     }
 
-    // Converts the file contents to a character array
-    public void contentToCharacters() {
-        try ( Scanner fileScanner = new Scanner(file)) {
+    /**
+     * Saves the contents of the file to a string
+     * Kind of unnecessary but will work on it later
+     */
+    public void contentToString() {
+        try (Scanner fileScanner = new Scanner(file)) {
             while (fileScanner.hasNextLine()) {
                 content += fileScanner.nextLine();
             }
@@ -65,13 +79,9 @@ public class HuffmanEncoder {
         }
     }
 
-    public void printUnorderedFrequencies() {
-        System.out.println("Note: the frequencies are not yet in order");
-        for (Map.Entry<Character, Integer> entry : frequencies.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
-
+    /**
+     * Creates a min-heap based on the frequencies of characters
+     */
     public void generateQueue() {
         int size = frequencies.size();
         queue = new PriorityQueue<Node>(size, new QueueComparator());
@@ -89,6 +99,10 @@ public class HuffmanEncoder {
         }
     }
 
+    /**
+     * Converts the original text to a binary string based on Huffman codes of each character
+     * @param tree Huffman tree consisting of characters and their Huffman codes
+     */
     public void toCodeString(HuffmanTree tree) {
         codeString = "";
         HashMap<Character, String> codeTree = tree.assignCodes(new HashMap<Character, String>(), tree.root, "");
@@ -100,7 +114,10 @@ public class HuffmanEncoder {
     }
     
     
-
+    /**
+     * 
+     * @return returns the min-heap
+     */
     public PriorityQueue<Node> getQueue() {
         return this.queue;
     }

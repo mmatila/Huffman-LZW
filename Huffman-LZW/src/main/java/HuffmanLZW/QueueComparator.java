@@ -14,7 +14,12 @@ import java.util.Comparator;
 public class QueueComparator implements Comparator<Node> {
 
     
-    // Comparator used to create a max-heap from PriorityQueue
+    /**
+     * Custom comparator used to keep the structure of a min-heap
+     * @param first Node to compare
+     * @param second Node to compare
+     * @return 1, 0 or -1. Each represent an ordering of the compared Nodes
+     */
     public int compare(Node first, Node second) {
         return first.frequency - second.frequency;
     }

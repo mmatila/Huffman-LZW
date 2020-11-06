@@ -19,6 +19,9 @@ public class Writer {
         this.codeString = codeString;
     }
 
+    /**
+     * Converts the binary string into bits
+     */
     public void stringToBits() {
 
     }

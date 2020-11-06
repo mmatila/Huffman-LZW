@@ -21,21 +21,11 @@ public class Huffman {
         HuffmanEncoder encoder = new HuffmanEncoder(file.toString());
         long start = System.currentTimeMillis();
         encoder.execute();
-        
-//        HuffmanTree tree = new HuffmanTree(encoder.getQueue());
-//        tree.generate();
-//        tree.print();
-
         long end = System.currentTimeMillis();
         System.out.println("Converting took: " + (end-start) + "ms");
         System.out.println("Original size of the file: " + file.length() + " bytes");
 //        System.out.println("Compressed size of the file: " + file.length() + " bytes");
         
-        // TODO PERJANTAINA:
-        // - TESTAUSTA
-        // - CHECKSTYLE
-        // - JAVADOC
-        // - ENCODING loppuun 
     }
 
 }
