@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package HuffmanLZW;
+package huffmanlzw;
 
 import java.io.File;
 
@@ -22,7 +22,7 @@ public class Huffman {
         long start = System.currentTimeMillis();
         encoder.execute();
         long end = System.currentTimeMillis();
-        System.out.println("Converting took: " + (end-start) + "ms");
+        System.out.println("Converting took: " + (end - start) + "ms");
         System.out.println("Original size of the file: " + file.length() + " bytes");
 //        System.out.println("Compressed size of the file: " + file.length() + " bytes");
         

@@ -7,4 +7,12 @@
             <goal>org.pitest:pitest-maven:mutationCoverage</goal>
         </goals>
     </action>
+    <action>
+            <actionName>CUSTOM-jxr checkstyle</actionName>
+            <displayName>jxr checkstyle</displayName>
+            <goals>
+                <goal>jxr:jxr</goal>
+                <goal>checkstyle:checkstyle</goal>
+            </goals>
+        </action>
 </actions>
