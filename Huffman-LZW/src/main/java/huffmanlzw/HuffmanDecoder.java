@@ -5,10 +5,24 @@
  */
 package huffmanlzw;
 
+import java.io.File;
+
 /**
  *
  * @author mmatila
  */
 public class HuffmanDecoder {
+    private File file;
     
+    public HuffmanDecoder(File file) {
+        this.file = file;
+    }
+    
+    public void execute() {
+        
+    }
+    
+    public void decompress() {
+        
+    }
 }

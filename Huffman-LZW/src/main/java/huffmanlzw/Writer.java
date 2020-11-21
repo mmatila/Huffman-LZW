@@ -5,7 +5,9 @@
  */
 package huffmanlzw;
 
-import java.util.BitSet;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  *
@@ -13,16 +15,32 @@ import java.util.BitSet;
  */
 public class Writer {
 
-    private String codeString;
+    private byte[] compressedArray;
+    private CustomArrayList<Integer> compressedList;
+    private FileOutputStream fos;
 
-    public Writer(String codeString) {
-        this.codeString = codeString;
+    public Writer(byte[] compressedArray) {
+        this.compressedArray = compressedArray;
+    }
+    
+    public Writer(CustomArrayList<Integer> compressedList) {
+        this.compressedList = compressedList;
     }
 
-    /**
-     * Converts the binary string into bits
-     */
-    public void stringToBits() {
-
+    public void writeHuffman() throws IOException {
+        fos = new FileOutputStream("huffmanCompressed.bin");
+        fos.write(compressedArray);
+        fos.close();
+        
+    }
+    
+    public void writeLZW() throws FileNotFoundException, IOException {
+        fos = new FileOutputStream("lzwCompressed.txt");
+        
+        for (int i = 0; i < compressedList.size(); i++) {
+            fos.write(compressedList.indexOf(i));
+        }
+        
+        fos.close();
     }
 }

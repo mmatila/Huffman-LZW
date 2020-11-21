@@ -37,7 +37,7 @@ public class HuffmanEncoderTest {
         } catch (Exception e) {
 
         }
-        encoder = new HuffmanEncoder(testFile.toString());
+        encoder = new HuffmanEncoder(testFile);
     }
 
     @Test
