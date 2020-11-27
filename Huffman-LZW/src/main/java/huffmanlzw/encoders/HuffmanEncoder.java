@@ -3,14 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw;
+package huffmanlzw.encoders;
 
+import huffmanlzw.ds.HuffmanTree;
+import huffmanlzw.ds.Node;
+import huffmanlzw.Writer;
+import huffmanlzw.ds.CustomPriorityQueue;
 import java.io.File;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Scanner;
 
 /**
@@ -27,11 +30,11 @@ public class HuffmanEncoder {
 
     // Frequencies mean the number of times a character appears in the given file
     private HashMap<Character, Integer> frequencies;
-    private PriorityQueue<Node> queue;
+    private CustomPriorityQueue queue;
 
     /**
      *
-     * @param fileName name to the file to be compressed
+     * @param file name to the file to be compressed
      */
     public HuffmanEncoder(File file) {
         this.file = file;
@@ -118,7 +121,7 @@ public class HuffmanEncoder {
      */
     public void generateQueue() {
         int size = frequencies.size();
-        queue = new PriorityQueue<Node>(size, new QueueComparator());
+        queue = new CustomPriorityQueue();
 
         for (Map.Entry<Character, Integer> entry : frequencies.entrySet()) {
             Node current = new Node();
@@ -152,13 +155,11 @@ public class HuffmanEncoder {
         
         I'm wondering if this is unnecessary work but I'll get back to it later.
         
-        */
-        
+         */
         char[] originalContent = content.toCharArray();
         for (char character : originalContent) {
             codeString += codeTree.get(character);
         }
-        
 
 //        System.out.println("turning original contents into a binary string: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
@@ -168,7 +169,7 @@ public class HuffmanEncoder {
      *
      * @return returns the min-heap
      */
-    public PriorityQueue<Node> getQueue() {
+    public CustomPriorityQueue getQueue() {
         return this.queue;
     }
 

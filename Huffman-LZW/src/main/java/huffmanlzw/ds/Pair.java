@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw;
+package huffmanlzw.ds;
 
 /**
  *
  * @author mmatila
  */
 public class Pair<K, V> {
-    
+
 
     private K key;
     private V value;

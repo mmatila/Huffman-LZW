@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw;
+package huffmanlzw.ds;
 
 /**
  *
@@ -11,11 +11,11 @@ package huffmanlzw;
  */
 public class CustomHashMap<K, V> {
 
-    private CustomArrayList<Pair<K, V>>[] values;
+    public CustomArrayList<Pair<K, V>>[] values;
     private int size;
 
     public CustomHashMap() {
-        this.values = new CustomArrayList[1000];
+        this.values = new CustomArrayList[16];
         this.size = 0;
     }
 
@@ -71,16 +71,33 @@ public class CustomHashMap<K, V> {
         return -1;
     }
 
+    public boolean containsKey(K key) {
+        for (int i = 0; i < size; i++) {
+             for (int j = 0; j < values[i].size(); j++) {
+                 if (values[i].get(j).getKey().equals(key)) {
+                     System.out.println(key + " " + values[i].get(j));
+                     return true;
+                 }
+             }
+        }
+        
+        return false;
+    }
+
     private void increment() {
         CustomArrayList<Pair<K, V>>[] newList = new CustomArrayList[this.values.length * 2];
 
         for (int i = 0; i < this.values.length; i++) {
             copy(newList, i);
         }
+        
         this.values = newList;
     }
 
     private void copy(CustomArrayList<Pair<K, V>>[] newList, int from) {
+        System.out.println(newList.length);
+        System.out.println(values.length);
+        
         for (int i = 0; i < this.values[from].size(); i++) {
             Pair<K, V> value = this.values[from].get(i);
 
@@ -93,13 +110,16 @@ public class CustomHashMap<K, V> {
         }
     }
 
+    public int size() {
+        return this.size;
+    }
 //    public V remove(K key) {
 //        CustomArrayList<Pair<K, V>> valuesInIndex = getValues(key);
 //        if (valuesInIndex.size() == 0) {
 //            return null;
 //        }
 //
-//        int index = getKeyIndexi(valuesInIndex, key);
+//        int index = getKeyIndex(valuesInIndex, key);
 //        if (index < 0) {
 //            return null;
 //        }
@@ -107,6 +127,4 @@ public class CustomHashMap<K, V> {
 //        Pair<K, V> pair = valuesInIndex.get(index);
 //        valuesInIndex.remove(pair);
 //        return pair.getValue();
-//    }
-
 }

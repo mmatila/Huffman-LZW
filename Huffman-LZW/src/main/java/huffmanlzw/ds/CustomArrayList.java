@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw;
+package huffmanlzw.ds;
 
 /**
  *
@@ -18,7 +18,7 @@ public class CustomArrayList<T> {
      * Constructor
      */
     public CustomArrayList() {
-        this.values = (T[]) new Object[10000];
+        this.values = (T[]) new Object[80];
         this.size = 0;
     }
     
@@ -65,16 +65,17 @@ public class CustomArrayList<T> {
 
     /**
      * Removes a value from the list
-     * @param value index of the value to be removed
+     * @param index index of the value to be removed
      * @return removed value
      */
-    public T remove(int value) {
-        T removeValue = values[value];
-        for (int i = value; i < size() - 1; i++) {
-            values[i] = values[i + 1];
+    public T remove(int index) {
+        if (index < 0) {
+            return null;
         }
+        
+        moveLeft(size);
         size--;
-        return removeValue;
+        return values[index];
     }
 
     /**
@@ -102,7 +103,8 @@ public class CustomArrayList<T> {
      */
     public T get(int index) {
         if (index < 0 || index >= this.size) {
-            throw new ArrayIndexOutOfBoundsException("Error in index");
+            return null;
+//            throw new ArrayIndexOutOfBoundsException("Error in index");
         }
 
         return this.values[index];

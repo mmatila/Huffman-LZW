@@ -5,6 +5,7 @@
  */
 package huffmanlzw;
 
+import huffmanlzw.ds.CustomArrayList;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;

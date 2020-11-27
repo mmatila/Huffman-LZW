@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw;
+package huffmanlzw.ds;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PriorityQueue;
 
 /**
  * 
@@ -15,10 +14,10 @@ import java.util.PriorityQueue;
  */
 public class HuffmanTree {
 
-    Node root;
-    private PriorityQueue<Node> queue;
+    public Node root;
+    private CustomPriorityQueue queue;
 
-    public HuffmanTree(PriorityQueue<Node> queue) {
+    public HuffmanTree(CustomPriorityQueue queue) {
         this.queue = queue;
     }
 
@@ -27,7 +26,7 @@ public class HuffmanTree {
      */
     public void generate() {
 
-        while (queue.size() > 1) {
+        while (queue.heapSize > 1) {
 
             Node first = queue.poll();
             Node second = queue.poll();
@@ -48,13 +47,13 @@ public class HuffmanTree {
     /**
      * Helper function that prints a list of all characters and their Huffman codes
      */
-    public void print() {
-        HashMap<Character, String> huffmanCodes = new HashMap<>();
-        assignCodes(huffmanCodes, root, "");
-        for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
+//    public void print() {
+//        HashMap<Character, String> huffmanCodes = new HashMap<>();
+//        assignCodes(huffmanCodes, root, "");
+//        for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
+//            System.out.println(entry.getKey() + ": " + entry.getValue());
+//        }
+//    }
 
     /**
      * Assigns each character a Huffman code by traversing the Huffman tree from the root

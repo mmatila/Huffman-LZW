@@ -1,12 +1,11 @@
 
-import huffmanlzw.HuffmanEncoder;
-import huffmanlzw.HuffmanTree;
-import huffmanlzw.Node;
-import huffmanlzw.QueueComparator;
+import huffmanlzw.ds.CustomPriorityQueue;
+import huffmanlzw.encoders.HuffmanEncoder;
+import huffmanlzw.ds.HuffmanTree;
+import huffmanlzw.ds.Node;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,8 +65,8 @@ public class HuffmanEncoderTest {
     }
 
     @Test
-    public void priorityQueueGeneratesCorrectly() {
-        PriorityQueue<Node> queue = new PriorityQueue<>(5, new QueueComparator());
+    public void CustompriorityQueueGeneratesCorrectly() {
+        CustomPriorityQueue queue = new CustomPriorityQueue();
         Node one = new Node('a', 3);
         Node two = new Node('b', 5);
         Node three = new Node('c', 2);
@@ -89,7 +88,7 @@ public class HuffmanEncoderTest {
 
     @Test
     public void huffmanTreeGeneratesCorrectly() {
-        PriorityQueue<Node> queue = new PriorityQueue<>(5, new QueueComparator());
+        CustomPriorityQueue queue = new CustomPriorityQueue();
         Node one = new Node('a', 3);
         Node two = new Node('b', 5);
         Node three = new Node('c', 2);
