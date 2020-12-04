@@ -63,8 +63,6 @@ public class CustomPriorityQueue {
         heapSize--;
         fixHeap(1);
         
-        // TODO: Decrease arr size ?
-        
         return node;
     }
 

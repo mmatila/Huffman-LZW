@@ -6,7 +6,7 @@
 package huffmanlzw.decoders;
 
 import huffmanlzw.ds.CustomArrayList;
-import java.util.HashMap;
+import huffmanlzw.ds.CustomHashMap;
 
 /**
  *
@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class LZWDecoder {
 
     private CustomArrayList<Integer> compressed;
-    private HashMap<Integer, String> dictionary;
+    private CustomHashMap<Integer, String> dictionary;
     private int dictionarySize;
     private String decompressed;
 
@@ -33,8 +33,8 @@ public class LZWDecoder {
      *
      * @return Dictionary with the first 255 ASCII entries
      */
-    public HashMap<Integer, String> buildDecodingDictionary() {
-        dictionary = new HashMap<>();
+    public CustomHashMap<Integer, String> buildDecodingDictionary() {
+        dictionary = new CustomHashMap<>();
         dictionarySize = 256;
 
         for (int i = 0; i < 256; i++) {
@@ -51,7 +51,7 @@ public class LZWDecoder {
     public void decompress() {
         String first = "" + (char) (int) compressed.remove(0);
         StringBuffer result = new StringBuffer(first);
-        for (int i = 0; i < compressed.size(); i++) {
+        for (int i = 1; i < compressed.size(); i++) {
             String entry;
             if (dictionary.containsKey(compressed.get(i))) {
                 entry = dictionary.get(compressed.get(i));
@@ -69,6 +69,5 @@ public class LZWDecoder {
         }
 
         decompressed = result.toString();
-//        System.out.println(decompressed);
     }
 }

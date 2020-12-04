@@ -5,6 +5,7 @@
  */
 package huffmanlzw;
 
+import com.sun.tools.javac.util.List;
 import huffmanlzw.decoders.LZWDecoder;
 import huffmanlzw.encoders.LZWEncoder;
 import huffmanlzw.encoders.HuffmanEncoder;
@@ -53,7 +54,6 @@ public class Main {
         System.out.println("Original size of the file: " + file.length() + " bytes");
         System.out.println("Compressed size of the file: " + lzwCompressed.length() + " bytes");
         System.out.println("Compressed file is " + Math.round(lzwCompressed.length() * 10.0 / file.length() * 10.0) + "% of the original size");
-        lzwDecoder.execute();
 
     }
 

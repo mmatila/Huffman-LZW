@@ -11,120 +11,138 @@ package huffmanlzw.ds;
  */
 public class CustomHashMap<K, V> {
 
-    public CustomArrayList<Pair<K, V>>[] values;
-    private int size;
+    private Entry<K, V>[] slots;
+    private int defaultCapacity = 80;
+    private int size = 0;
 
     public CustomHashMap() {
-        this.values = new CustomArrayList[16];
-        this.size = 0;
+        this.slots = new Entry[defaultCapacity];
     }
 
-    public V get(K key) {
-        int hashValue = Math.abs(key.hashCode() % this.values.length);
-        if (this.values[hashValue] == null) {
-            return null;
-        }
-
-        CustomArrayList<Pair<K, V>> valuesInIndex = this.values[hashValue];
-
-        for (int i = 0; i < valuesInIndex.size(); i++) {
-            if (valuesInIndex.get(i).getKey().equals(key)) {
-                return valuesInIndex.get(i).getValue();
-            }
-        }
-
-        return null;
+    public CustomHashMap(int capacity) {
+        this.slots = new Entry[capacity];
     }
 
     public void put(K key, V value) {
-        CustomArrayList<Pair<K, V>> valuesInIndex = getValues(key);
-        int index = getKeyIndex(valuesInIndex, key);
+        if (size >= slots.length) {
+            incrementCapacity();
+        }
 
-        if (index < 0) {
-            valuesInIndex.add(new Pair<>(key, value));
-            this.size++;
+        int index = getIndex(key);
+        Entry<K, V> existingEntry = slots[index];
+
+        if (slots[index] == null) {
+            slots[index] = new Entry(key, value, null);
+            size++;
         } else {
-            valuesInIndex.get(index).setValue(value);
-        }
+            // In a case where index has more than 1 existing Entry already
+            while (existingEntry.next != null) {
+                if (existingEntry.key.equals(key)) {
+                    existingEntry.value = value;
+                    return;
+                }
+                existingEntry = existingEntry.next;
+            }
 
-        if (1.0 * this.size / this.values.length > 0.75) {
-            increment();
-        }
-    }
-
-    private CustomArrayList<Pair<K, V>> getValues(K key) {
-        int hashValue = Math.abs(key.hashCode() % values.length);
-        if (values[hashValue] == null) {
-            values[hashValue] = new CustomArrayList<>();
-        }
-
-        return values[hashValue];
-    }
-
-    private int getKeyIndex(CustomArrayList<Pair<K, V>> list, K key) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getKey().equals(key)) {
-                return i;
+            if (existingEntry.key.equals(key)) {
+                existingEntry.value = value;
+            } else {
+                existingEntry.next = new Entry(key, value, null);
+                size++;
             }
         }
+    }
 
-        return -1;
+    public V get(K key) {
+        int index = getIndex(key);
+        Entry<K, V> slot = slots[index];
+
+        while (slot != null) {
+            if (slot.key.equals(key)) {
+                return slot.value;
+            }
+            slot = slot.next;
+        }
+        return null;
+    }
+
+    public V remove(K key) {
+        V toReturn = null;
+        int index = getIndex(key);
+        Entry<K, V> previous = null;
+        Entry<K, V> existing = slots[index];
+        while (existing != null) {
+            if (existing.getKey().equals(key)) {
+                toReturn = existing.getValue();
+                size--;
+                if (previous == null) {
+                    existing = existing.getNext();
+                    slots[index] = existing;
+                    return toReturn;
+                } else {
+                    previous.setNext(existing.getNext());
+                    return toReturn;
+                }
+            }
+            previous = existing;
+            existing = existing.getNext();
+        }
+
+        return toReturn;
     }
 
     public boolean containsKey(K key) {
-        for (int i = 0; i < size; i++) {
-             for (int j = 0; j < values[i].size(); j++) {
-                 if (values[i].get(j).getKey().equals(key)) {
-                     System.out.println(key + " " + values[i].get(j));
-                     return true;
-                 }
-             }
+        if (key == null) {
+            return false;
         }
-        
+        int index = getIndex(key);
+        if (index < 0)
+            index = -index;
+        Entry<K, V> slot = slots[index];
+
+        while (slot != null) {
+            if (slot.key.equals(key)) {
+                return true;
+            }
+            slot = slot.next;
+        }
         return false;
     }
 
-    private void increment() {
-        CustomArrayList<Pair<K, V>>[] newList = new CustomArrayList[this.values.length * 2];
-
-        for (int i = 0; i < this.values.length; i++) {
-            copy(newList, i);
-        }
+    public void incrementCapacity() {
+        Entry[] old = slots;
+        slots = new Entry[size * 2];
+        size = 0;
         
-        this.values = newList;
+        for (int i = 0; i < old.length; i++) {
+            Entry<K, V> entry = old[i];
+            if (entry == null) 
+                continue;
+            while (entry.next != null) {
+                put(entry.key, entry.value);
+                entry = entry.next;
+            }
+            put(entry.key, entry.value);
+        }
     }
 
-    private void copy(CustomArrayList<Pair<K, V>>[] newList, int from) {
-        System.out.println(newList.length);
-        System.out.println(values.length);
-        
-        for (int i = 0; i < this.values[from].size(); i++) {
-            Pair<K, V> value = this.values[from].get(i);
-
-            int hashValue = Math.abs(value.getKey().hashCode() % newList.length);
-            if (newList[hashValue] == null) {
-                newList[hashValue] = new CustomArrayList<>();
-            }
-
-            newList[hashValue].add(value);
-        }
+    public int getIndex(K key) {
+        if (key == null)
+            return 0;
+        int index = key.hashCode() % slots.length;
+        return index > 0 ? index : -index;
     }
 
     public int size() {
         return this.size;
     }
-//    public V remove(K key) {
-//        CustomArrayList<Pair<K, V>> valuesInIndex = getValues(key);
-//        if (valuesInIndex.size() == 0) {
-//            return null;
-//        }
-//
-//        int index = getKeyIndex(valuesInIndex, key);
-//        if (index < 0) {
-//            return null;
-//        }
-//
-//        Pair<K, V> pair = valuesInIndex.get(index);
-//        valuesInIndex.remove(pair);
-//        return pair.getValue();
+
+    public int capacity() {
+        return slots.length;
+    }
+    
+    public Entry[] getSlots() {
+        return this.slots;
+    }
+
 }

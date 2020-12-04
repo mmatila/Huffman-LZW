@@ -8,12 +8,11 @@ package huffmanlzw.encoders;
 import huffmanlzw.ds.HuffmanTree;
 import huffmanlzw.ds.Node;
 import huffmanlzw.Writer;
+import huffmanlzw.ds.CustomHashMap;
 import huffmanlzw.ds.CustomPriorityQueue;
+import huffmanlzw.ds.Entry;
 import java.io.File;
 import java.io.IOException;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -29,7 +28,7 @@ public class HuffmanEncoder {
     private long now;
 
     // Frequencies mean the number of times a character appears in the given file
-    private HashMap<Character, Integer> frequencies;
+    private CustomHashMap<Character, Integer> frequencies;
     private CustomPriorityQueue queue;
 
     /**
@@ -39,7 +38,7 @@ public class HuffmanEncoder {
     public HuffmanEncoder(File file) {
         this.file = file;
         this.content = "";
-        this.frequencies = new HashMap<>();
+        this.frequencies = new CustomHashMap<>();
     }
 
     /**
@@ -62,6 +61,7 @@ public class HuffmanEncoder {
 //        now = System.currentTimeMillis();
         toCodeString(tree);
         compress();
+//        compress();
 //        System.out.println("compress() took: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
         Writer writer = new Writer(compressed);
@@ -73,7 +73,7 @@ public class HuffmanEncoder {
 
     /**
      * Calculates the frequencies of characters in the given file and saves them
-     * to a HashMap
+     * to a CustomHashMap
      */
     public void generateFrequencies() {
         char[] chars = content.toCharArray();
@@ -104,16 +104,29 @@ public class HuffmanEncoder {
      * Compresses the binary string into bytes
      */
     public void compress() {
-        BitSet bitSet = new BitSet(codeString.length());
-        int bitcounter = 0;
-        for (Character c : codeString.toCharArray()) {
-            if (c.equals('1')) {
-                bitSet.set(bitcounter);
-            }
-            bitcounter++;
+        compressed = new byte[codeString.length() / 8];
+        char start;
+        int j = 0;
+        String binary = "";
+        for (int i = 1; i <= 8; i++) {
+            start = codeString.charAt(i);
+            binary += start;
         }
+        compressed[j] = getByteValue(binary);
+        j++;
+    }
 
-        compressed = bitSet.toByteArray();
+    public byte getByteValue(String binaryString) {
+        int currentValue = 128;
+        int result = 0;
+
+        for (int i = 0; i <= 7; i++) {
+            if (binaryString.charAt(i) == '1') {
+                result += currentValue;
+            }
+            currentValue = currentValue / 2;
+        }
+        return (byte)result;
     }
 
     /**
@@ -123,16 +136,18 @@ public class HuffmanEncoder {
         int size = frequencies.size();
         queue = new CustomPriorityQueue();
 
-        for (Map.Entry<Character, Integer> entry : frequencies.entrySet()) {
-            Node current = new Node();
+        for (Entry<Character, Integer> entry : frequencies.getSlots()) {
+            if (entry != null) {
+                Node current = new Node();
 
-            current.character = entry.getKey();
-            current.frequency = entry.getValue();
+                current.character = entry.getKey();
+                current.frequency = entry.getValue();
 
-            current.left = null;
-            current.right = null;
+                current.left = null;
+                current.right = null;
 
-            queue.add(current);
+                queue.add(current);
+            }
         }
     }
 
@@ -143,8 +158,8 @@ public class HuffmanEncoder {
      * @param tree Huffman tree consisting of characters and their Huffman codes
      */
     public void toCodeString(HuffmanTree tree) {
-        codeString = "";
-        HashMap<Character, String> codeTree = tree.assignCodes(new HashMap<Character, String>(), tree.root, "");
+        StringBuilder codeStringBuilder = new StringBuilder();
+        CustomHashMap<Character, String> codeTree = tree.assignCodes(new CustomHashMap<Character, String>(), tree.root, "");
 //        System.out.println("assignCodes() took: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
 
@@ -157,9 +172,12 @@ public class HuffmanEncoder {
         
          */
         char[] originalContent = content.toCharArray();
+
         for (char character : originalContent) {
-            codeString += codeTree.get(character);
+            codeStringBuilder.append(codeTree.get(character));
         }
+
+        this.codeString = codeStringBuilder.toString();
 
 //        System.out.println("turning original contents into a binary string: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
@@ -177,7 +195,7 @@ public class HuffmanEncoder {
         return this.content;
     }
 
-    public HashMap<Character, Integer> getFrequencies() {
+    public CustomHashMap<Character, Integer> getFrequencies() {
         return this.frequencies;
     }
 }

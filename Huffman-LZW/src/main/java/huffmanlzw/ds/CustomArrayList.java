@@ -124,4 +124,14 @@ public class CustomArrayList<T> {
 
         return -1;
     }
+    
+    @Override
+    public String toString() {
+        String toReturn = "";
+        for (T t : values) {
+            toReturn += t;
+        }
+        
+        return toReturn;
+    }
 }
