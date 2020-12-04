@@ -5,6 +5,8 @@
  */
 package huffmanlzw.decoders;
 
+import huffmanlzw.ds.HuffmanTree;
+import huffmanlzw.ds.Node;
 import java.io.File;
 
 /**
@@ -13,9 +15,11 @@ import java.io.File;
  */
 public class HuffmanDecoder {
     private File file;
+    private Node root;
     
-    public HuffmanDecoder(File file) {
+    public HuffmanDecoder(File file, HuffmanTree htree) {
         this.file = file;
+        this.root = htree.root;
     }
     
     public void execute() {

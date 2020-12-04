@@ -11,13 +11,13 @@ package huffmanlzw.ds;
  */
 public class CustomPriorityQueue {
     
-    Node[] arr;
-    int heapSize;
+    Node[] table;
+    int size;
     
     public CustomPriorityQueue() {
-        this.arr = new Node[255];
-        this.arr[0] = new Node();
-        this.heapSize = 0;
+        this.table = new Node[255];
+        this.table[0] = new Node();
+        this.size = 0;
     }
     
     /**
@@ -26,14 +26,14 @@ public class CustomPriorityQueue {
      * @param node Node to be added.
      */
     public void add(Node node) {
-        heapSize++;
-        int index = heapSize;
-        arr[index] = node;
+        size++;
+        int index = size;
+        table[index] = node;
 
-        while (arr[index / 2].getFrequency() > arr[index].getFrequency()) {
-            Node child = arr[index];
-            arr[index] = arr[index / 2];
-            arr[index / 2] = child;
+        while (table[index / 2].getFrequency() > table[index].getFrequency()) {
+            Node child = table[index];
+            table[index] = table[index / 2];
+            table[index / 2] = child;
             
             if (index / 2 == 1) {
                 break;
@@ -41,67 +41,57 @@ public class CustomPriorityQueue {
             index = index / 2;
         }
         
-        // Increase array size if array is getting full
-        if (heapSize > arr.length * 0.5) {
+        // Increase table size if table is getting full
+        if (size > table.length * 0.5) {
             increaseSize();
         }
     }
     
     /**
-     * Retrieves and removes the smallest node from the heap.
-     * Also fixes the heap property.
+     * Returns and removes the smallest node from the heap.
      * @return Node
      */
     public Node poll() {
-        Node node = arr[1];
+        Node node = table[1];
 
         // Move last to top
-        int index = heapSize;
-        arr[1] = arr[index];
-        arr[index] = null;
+        int index = size;
+        table[1] = table[index];
+        table[index] = null;
         
-        heapSize--;
-        fixHeap(1);
+        size--;
+        heapify(1);
         
         return node;
     }
 
-    private void fixHeap(int index) {
-        int leftI = 2 * index;
-        int rightI = 2 * index + 1;
+    private void heapify(int index) {
+        int leftChild = 2 * index;
+        int rightChild = 2 * index + 1;
         
-        int smI;
-        if (leftI <= heapSize && arr[leftI].getFrequency() < arr[index].getFrequency()) {
-            smI = leftI;
+        int position;
+        if (leftChild <= size && table[leftChild].getFrequency() < table[index].getFrequency()) {
+            position = leftChild;
         } else {
-            smI = index;
+            position = index;
         }
-        if (rightI <= heapSize && arr[rightI].getFrequency() < arr[smI].getFrequency()) {
-            smI = rightI;
+        if (rightChild <= size && table[rightChild].getFrequency() < table[position].getFrequency()) {
+            position = rightChild;
         }
         
-        if (smI != index) {
-            Node temp = arr[index];
-            arr[index] = arr[smI];
-            arr[smI] = temp;
-            fixHeap(smI);
+        if (position != index) {
+            Node temp = table[index];
+            table[index] = table[position];
+            table[position] = temp;
+            heapify(position);
         }
-    }
-    
-    /**
-     * Returns True if heap is empty and false if heap
-     * contains nodes.
-     * @return Boolean
-     */
-    public boolean isEmpty() {
-        return heapSize == 0;
     }
     
     private void increaseSize() {
-        int newSize = arr.length * 2;
-        Node[] newArr = new Node[newSize];
-        System.arraycopy(arr, 0, newArr, 0, arr.length - 1);
-        arr = newArr;
+        int newSize = table.length * 2;
+        Node[] newTable = new Node[newSize];
+        System.arraycopy(table, 0, newTable, 0, table.length - 1);
+        table = newTable;
     }    
 }
 

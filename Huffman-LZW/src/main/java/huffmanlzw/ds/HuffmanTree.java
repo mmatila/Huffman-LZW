@@ -23,7 +23,7 @@ public class HuffmanTree {
      */
     public void generate() {
 
-        while (queue.heapSize > 1) {
+        while (queue.size > 1) {
 
             Node first = queue.poll();
             Node second = queue.poll();
@@ -42,17 +42,6 @@ public class HuffmanTree {
     }
 
     /**
-     * Helper function that prints a list of all characters and their Huffman
-     * codes
-     */
-//    public void print() {
-//        CustomHashMap<Character, String> huffmanCodes = new CustomHashMap<>();
-//        assignCodes(huffmanCodes, root, "");
-//        for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
-//            System.out.println(entry.getKey() + ": " + entry.getValue());
-//        }
-//    }
-    /**
      * Assigns each character a Huffman code by traversing the Huffman tree from
      * the root
      *
@@ -61,21 +50,6 @@ public class HuffmanTree {
      * @param code The actual Huffman code of a character
      * @return List of characters and their Huffman codes
      */
-//    public CustomHashMap<Character, String> assignCodes(CustomHashMap<Character, String> huffmanCodes, Node root, String code) {
-//        if (root.left == null && root.right == null) {
-//            huffmanCodes.put(root.character, code);
-//        } else {
-//            if (root.left != null) {
-//                assignCodes(huffmanCodes, root.left, code + "0");
-//            }
-//
-//            if (root.right != null) {
-//                assignCodes(huffmanCodes, root.right, code + "1");
-//            }
-//        }
-//
-//        return huffmanCodes;
-//    }
     public CustomHashMap<Character, String> assignCodes(CustomHashMap<Character, String> huffmanCodes, Node root, String code) {
         if (root.left == null && root.right == null) {
             huffmanCodes.put(root.character, code);

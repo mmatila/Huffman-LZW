@@ -86,24 +86,6 @@ public class LZWEncoder {
         }
     }
 
-//    public void compress() {
-//        String s;
-//        s = "" + (char) uncompressed.charAt(4);
-//        System.out.println(s);
-//        
-//        for (char character : uncompressed.toCharArray()) {
-//            String current = s + character;
-//            if (dictionary.containsKey(current)) {
-//                s = s+character;
-//            } else {
-//                result.add(dictionary.get(s));
-//                dictionary.put(s, dictionarySize);
-//                dictionarySize++;
-//                s += character;
-//            }
-//        }
-//        result.add(dictionary.get(s));
-//    }
     /**
      * Initializing the dictionary with the first 255 ASCII entries
      *
