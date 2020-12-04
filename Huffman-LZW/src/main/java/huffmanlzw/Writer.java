@@ -28,8 +28,8 @@ public class Writer {
         this.compressedList = compressedList;
     }
 
-    public void writeHuffman() throws IOException {
-        fos = new FileOutputStream("huffmanCompressed.bin");
+    public void writeHuffman(String compressed) throws IOException {
+        fos = new FileOutputStream(compressed);
         fos.write(compressedArray);
         fos.close();
         

@@ -65,7 +65,10 @@ public class HuffmanEncoder {
 //        System.out.println("compress() took: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
         Writer writer = new Writer(compressed);
-        writer.writeHuffman();
+        String original = file.getName();
+        String newName = "";
+        newName = original.replaceFirst("[.][^.]+$", "");
+        writer.writeHuffman(newName + ".HuffmanCompressed.bin");
 //        System.out.println("writer.writeHuffman() took: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
 //        tree.print();
