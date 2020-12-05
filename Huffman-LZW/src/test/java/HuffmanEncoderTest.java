@@ -1,11 +1,12 @@
 
+import huffmanlzw.ds.CustomHashMap;
 import huffmanlzw.ds.CustomPriorityQueue;
 import huffmanlzw.encoders.HuffmanEncoder;
 import huffmanlzw.ds.HuffmanTree;
 import huffmanlzw.ds.Node;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.HashMap;
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class HuffmanEncoderTest {
     public void characterFrequenciesAreCountedCorrectly() {
         encoder.contentToString();
         encoder.generateFrequencies();
-        HashMap<Character, Integer> frequencies = encoder.getFrequencies();
+        CustomHashMap<Character, Integer> frequencies = encoder.getFrequencies();
         int h = frequencies.get('H');
         int e = frequencies.get('e');
         int l = frequencies.get('l');
@@ -100,19 +101,18 @@ public class HuffmanEncoderTest {
         queue.add(three);
         queue.add(four);
         queue.add(five);
-        
+
         HuffmanTree tree = new HuffmanTree(queue);
         tree.generate();
         Node root = tree.getRoot();
-        
+
         assertEquals(21, root.getFrequency());
         assertEquals(11, root.getRight().getFrequency());
         assertEquals(10, root.getLeft().getFrequency());
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    @After
+    public void deleteTestFile() {
+        testFile.delete();
+    }
 }

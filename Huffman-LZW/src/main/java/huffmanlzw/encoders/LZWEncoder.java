@@ -48,13 +48,16 @@ public class LZWEncoder {
      * from them
      */
     public void fileToString() {
+        StringBuilder builder = new StringBuilder();
         try ( Scanner fileScanner = new Scanner(fileToCompress)) {
             while (fileScanner.hasNextLine()) {
-                uncompressed += fileScanner.nextLine();
+                builder.append(fileScanner.nextLine());
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+        
+       uncompressed = builder.toString();
     }
 
     /**

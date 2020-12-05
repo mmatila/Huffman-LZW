@@ -94,13 +94,16 @@ public class HuffmanEncoder {
      * work on it later
      */
     public void contentToString() {
+        StringBuilder builder = new StringBuilder();
         try ( Scanner fileScanner = new Scanner(file)) {
             while (fileScanner.hasNextLine()) {
-                content += fileScanner.nextLine();
+                builder.append(fileScanner.nextLine());
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+        
+        content = builder.toString();
     }
 
     /**

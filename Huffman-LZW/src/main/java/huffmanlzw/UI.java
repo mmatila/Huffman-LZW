@@ -53,7 +53,7 @@ public class UI {
 
     public void handleOne() {
         String fileName;
-        System.out.print("\nName of the file to compress: ");
+        System.out.print("\nName of the file to compress (must exist in root folder, no error handling yet): ");
         fileName = scanner.nextLine();
         String compressedFileName = "";
         compressedFileName = fileName.replaceFirst("[.][^.]+$", "") + ".HuffmanCompressed.bin";
@@ -101,7 +101,7 @@ public class UI {
 
     public void printHuffmanEncodingStats(Long start, Long end, File uncompressed, File compressed) {  
         System.out.println("\n----- Huffman compression successful! -----\n");
-        System.out.println("Converting took: " + (end - start) + "ms");
+        System.out.println("Encoding took: " + (end - start) + "ms");
         System.out.println("Original size of the file: " + uncompressed.length() + " bytes");
         System.out.println("Compressed size of the file: " + compressed.length() + " bytes");
         System.out.println("Compressed file is " + Math.round(compressed.length() * 10.0 / uncompressed.length() * 10.0) + "% of the original size\n");
