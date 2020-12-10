@@ -5,13 +5,9 @@
  */
 package huffmanlzw;
 
-import com.sun.tools.javac.util.List;
-import huffmanlzw.decoders.LZWDecoder;
-import huffmanlzw.encoders.LZWEncoder;
-import huffmanlzw.encoders.HuffmanEncoder;
+import huffmanlzw.decoders.HuffmanDecoder;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  *
@@ -20,8 +16,10 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        UI userInterface = new UI();
-        userInterface.run();
+        HuffmanDecoder hd = new HuffmanDecoder(new File("t.HuffmanCompressed.bin"));
+        hd.decompress();
+//        UI userInterface = new UI();
+//        userInterface.run();
 //        Scanner scanner = new Scanner(System.in);
 //        System.out.print("Please enter the name of the file you wish to encode: ");
 //        String fileName = scanner.nextLine();
