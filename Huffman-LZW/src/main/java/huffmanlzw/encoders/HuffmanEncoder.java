@@ -26,6 +26,7 @@ public class HuffmanEncoder {
     private String codeString;
     private byte[] compressed;
     private long now;
+    private String treeAsString = "";
 
     // Frequencies mean the number of times a character appears in the given file
     private CustomHashMap<Character, Integer> frequencies;
@@ -60,11 +61,12 @@ public class HuffmanEncoder {
 //        System.out.println("tree.generate() took: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
         toCodeString(tree);
+        treeAsString = tree.toString(tree.root, "");
         compress();
 //        compress();
 //        System.out.println("compress() took: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
-        Writer writer = new Writer(compressed);
+        Writer writer = new Writer(treeAsString + "111111111", compressed);
         String original = file.getName();
         String newName = "";
         newName = original.replaceFirst("[.][^.]+$", "");
@@ -113,12 +115,12 @@ public class HuffmanEncoder {
         compressed = new byte[codeString.length() / 8];
         char start;
         int j = 0;
-        String binary = "";
+        StringBuilder binary = new StringBuilder();
         for (int i = 1; i <= 8; i++) {
             start = codeString.charAt(i);
-            binary += start;
+            binary.append(start);
         }
-        compressed[j] = getByteValue(binary);
+        compressed[j] = getByteValue(binary.toString());
         j++;
     }
 

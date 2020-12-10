@@ -64,6 +64,23 @@ public class HuffmanTree {
 
         return huffmanCodes;
     }
+    
+    public String toString(Node currentNode, String treeAsString) {
+        if (currentNode.left != null && currentNode.right != null) {
+            treeAsString += "0";
+            treeAsString = toString(currentNode.left, treeAsString);
+            treeAsString = toString(currentNode.right, treeAsString);
+            return treeAsString;
+        }
+        treeAsString += "1";
+        
+        String bits = Integer.toBinaryString(currentNode.getCharacter());
+        
+        while (bits.length() < 8) {
+            bits = "0" + bits;
+        }
+        return treeAsString += bits;
+    }
 
     public Node getRoot() {
         return this.root;

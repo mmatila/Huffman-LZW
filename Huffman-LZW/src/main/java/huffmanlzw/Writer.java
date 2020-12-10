@@ -6,6 +6,7 @@
 package huffmanlzw;
 
 import huffmanlzw.ds.CustomArrayList;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,10 +21,19 @@ public class Writer {
     private CustomArrayList<Integer> compressedList;
     private FileOutputStream fos;
 
-    public Writer(byte[] compressedArray) {
-        this.compressedArray = compressedArray;
+    public Writer(String tree, byte[] compressedArray) throws IOException {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            outputStream.write(tree.getBytes());
+            outputStream.write(compressedArray);
+            
+            this.compressedArray = outputStream.toByteArray();
+            System.out.println(tree);
+        } catch (IOException ie) {
+            System.out.println("Error: " + ie.getMessage());
+        }
     }
-    
+
     public Writer(CustomArrayList<Integer> compressedList) {
         this.compressedList = compressedList;
     }
@@ -32,16 +42,17 @@ public class Writer {
         fos = new FileOutputStream(compressed);
         fos.write(compressedArray);
         fos.close();
-        
+
     }
-    
+
     public void writeLZW() throws FileNotFoundException, IOException {
         fos = new FileOutputStream("lzwCompressed.txt");
-        
+
         for (int i = 0; i < compressedList.size(); i++) {
             fos.write(compressedList.indexOf(i));
         }
-        
+
         fos.close();
     }
+
 }
