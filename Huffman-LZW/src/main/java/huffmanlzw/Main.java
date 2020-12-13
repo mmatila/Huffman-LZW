@@ -5,7 +5,7 @@
  */
 package huffmanlzw;
 
-import ui.UI;
+import huffmanlzw.ui.UI;
 import java.io.IOException;
 
 /**

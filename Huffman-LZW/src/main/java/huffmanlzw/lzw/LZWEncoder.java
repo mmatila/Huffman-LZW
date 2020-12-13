@@ -8,9 +8,9 @@ package huffmanlzw.lzw;
 import huffmanlzw.datastructures.CustomArrayList;
 import huffmanlzw.utils.Writer;
 import huffmanlzw.datastructures.CustomHashMap;
+import huffmanlzw.utils.Reader;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  *
@@ -19,6 +19,7 @@ import java.util.Scanner;
 public class LZWEncoder {
 
     private File fileToCompress;
+    private Reader reader;
     private String uncompressed;
     private CustomHashMap<String, Integer> dictionary;
     private CustomArrayList<Integer> result;
@@ -26,6 +27,7 @@ public class LZWEncoder {
 
     public LZWEncoder(File fileToCompress) {
         this.fileToCompress = fileToCompress;
+        this.reader = new Reader(fileToCompress);
         this.dictionary = buildEncodingDictionary();
         this.result = new CustomArrayList<>();
     }
@@ -37,27 +39,10 @@ public class LZWEncoder {
      * @throws IOException
      */
     public void execute() throws IOException {
-        fileToString();
+        uncompressed = reader.fileToString();
         compress();
         Writer writer = new Writer(result);
         writer.writeLZW();
-    }
-
-    /**
-     * Reads the contents of the file to be compressed and forms a single string
-     * from them
-     */
-    public void fileToString() {
-        StringBuilder builder = new StringBuilder();
-        try ( Scanner fileScanner = new Scanner(fileToCompress)) {
-            while (fileScanner.hasNextLine()) {
-                builder.append(fileScanner.nextLine());
-            }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        
-       uncompressed = builder.toString();
     }
 
     /**
@@ -70,7 +55,7 @@ public class LZWEncoder {
         char[] characters = uncompressed.toCharArray();
 
         // i is 4 because there's a null in the beginning of the char array for some reason
-        for (int i = 4; i < characters.length; i++) {
+        for (int i = 0; i < characters.length; i++) {
             String current = first + characters[i];
 //            System.out.println(current);
             if (dictionary.containsKey(current)) {

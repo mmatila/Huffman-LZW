@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui;
+package huffmanlzw.ui;
 
+import huffmanlzw.huffman.HuffmanDecoder;
 import huffmanlzw.huffman.HuffmanEncoder;
+import huffmanlzw.lzw.LZWDecoder;
+import huffmanlzw.lzw.LZWEncoder;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -22,7 +25,7 @@ public class UI {
         this.scanner = new Scanner(System.in);
     }
 
-    public void run() {
+    public void run() throws IOException {
         String choice;
         printOptions(false);
         while (true) {
@@ -30,6 +33,12 @@ public class UI {
             switch (choice) {
                 case "1":
                     handleOne();
+                    break;
+                case "2":
+                    handleTwo();
+                    break;
+                case "3":
+                    handleThree();
                     break;
                 case "exit":
                     handleExit();
@@ -56,7 +65,7 @@ public class UI {
         System.out.print("\nName of the file to compress (must exist in root folder, no error handling yet): ");
         fileName = scanner.nextLine();
         String compressedFileName = "";
-        compressedFileName = fileName.replaceFirst("[.][^.]+$", "") + ".HuffmanCompressed.bin";
+        compressedFileName = fileName.replaceFirst("[.][^.]+$", "") + ".huff";
         File toCompress = new File(fileName);
         try {
             Long start = System.currentTimeMillis();
@@ -70,7 +79,18 @@ public class UI {
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
-
+    }
+    
+    public void handleTwo() throws IOException {
+        HuffmanDecoder hd = new HuffmanDecoder(new File("test.huff"));
+        hd.decompress();
+    }
+    
+    public void handleThree() throws IOException {
+        LZWEncoder e = new LZWEncoder(new File("test.txt"));
+        e.execute();
+        LZWDecoder d = new LZWDecoder(e.getCompressed());
+        d.execute();
     }
     
     public void handleDefault() {

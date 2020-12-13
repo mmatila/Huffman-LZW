@@ -17,19 +17,22 @@ import java.io.IOException;
 public class Writer {
 
     private byte[] compressedArray;
+    private String fileName;
     private CustomArrayList<Integer> compressedList;
     private FileOutputStream fos;
 
-    public Writer(byte[] compressed) throws IOException {
+    public Writer(byte[] compressed, String fileName) throws IOException {
         this.compressedArray = compressed;
+        this.fileName = fileName;
     }
 
     public Writer(CustomArrayList<Integer> compressedList) {
         this.compressedList = compressedList;
     }
 
-    public void writeHuffman(String compressed) throws IOException {
-        fos = new FileOutputStream(compressed);
+    public void writeHuffman() throws IOException {
+        String newName = fileName.replaceFirst("[.][^.]+$", "") + ".huff";
+        fos = new FileOutputStream(newName);
         fos.write(compressedArray);
         fos.close();
 
@@ -38,7 +41,7 @@ public class Writer {
     public void writeLZW() throws FileNotFoundException, IOException {
         fos = new FileOutputStream("lzwCompressed.txt");
 
-        for (int i = 0; i < compressedList.size(); i++) {
+        for (int i = 0; i <= compressedList.size(); i++) {
             fos.write(compressedList.indexOf(i));
         }
 

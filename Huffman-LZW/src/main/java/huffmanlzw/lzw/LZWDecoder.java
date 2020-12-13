@@ -49,8 +49,9 @@ public class LZWDecoder {
      * codes back into a string
      */
     public void decompress() {
+        StringBuilder result = new StringBuilder();
         String first = "" + (char) (int) compressed.remove(0);
-        StringBuffer result = new StringBuffer(first);
+        result.append(first);
         for (int i = 1; i < compressed.size(); i++) {
             String entry;
             if (dictionary.containsKey(compressed.get(i))) {
@@ -69,5 +70,6 @@ public class LZWDecoder {
         }
 
         decompressed = result.toString();
+        System.out.println(decompressed);
     }
 }

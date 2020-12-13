@@ -11,9 +11,9 @@ import huffmanlzw.utils.Writer;
 import huffmanlzw.datastructures.CustomHashMap;
 import huffmanlzw.datastructures.CustomPriorityQueue;
 import huffmanlzw.datastructures.Entry;
+import huffmanlzw.utils.Reader;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  *
@@ -22,42 +22,39 @@ import java.util.Scanner;
 public class HuffmanEncoder {
 
     private File file;
+    private Reader reader;
     private String content;
     private String codeString;
     private byte[] compressed;
-    private String treeAsString = "";
-
+    private String treeAsString;
     private CustomHashMap<Character, Integer> frequencies;
     private CustomPriorityQueue queue;
 
     /**
-     *
-     * @param file name to the file to be compressed
+     * Constructor. Initializes a new Reader used to read the file given as a
+     * parameter
+     * @param file File to be compressed
      */
     public HuffmanEncoder(File file) {
         this.file = file;
-        this.content = "";
-        this.frequencies = new CustomHashMap<>();
+        this.reader = new Reader(file);
     }
 
     /**
-     * Method that handles the whole encoding
+     * Method that handles the whole flow of encoding
+     * @throws IOException
      */
     public void execute() throws IOException {
-        contentToString();
+        this.content = reader.fileToString();
         generateFrequencies();
         generateQueue();
-        HuffmanTree tree = new HuffmanTree(getQueue());
+        HuffmanTree tree = new HuffmanTree(this.queue);
         tree.generate();
-        toCodeString(tree);
-        treeAsString = tree.toString(tree.root, "") + "111111111";
-        System.out.println(treeAsString);
+        nodesToBinary(tree);
+        this.treeAsString = tree.toString(tree.root, "");
         compress();
-        Writer writer = new Writer(compressed);
-        String original = file.getName();
-        String newName = "";
-        newName = original.replaceFirst("[.][^.]+$", "");
-        writer.writeHuffman(newName + ".HuffmanCompressed.bin");
+        Writer writer = new Writer(compressed, file.getName());
+        writer.writeHuffman();
     }
 
     /**
@@ -65,6 +62,7 @@ public class HuffmanEncoder {
      * to a CustomHashMap
      */
     public void generateFrequencies() {
+        this.frequencies = new CustomHashMap<>();
         char[] chars = content.toCharArray();
         for (char character : chars) {
             if (frequencies.containsKey(character)) {
@@ -73,53 +71,108 @@ public class HuffmanEncoder {
                 frequencies.put(character, 1);
             }
         }
-
     }
 
     /**
-     * Saves the contents of the file to a string. Kind of unnecessary but will
-     * work on it later
+     * Creates a min-heap based on the frequencies of characters
      */
-    public void contentToString() {
-        StringBuilder builder = new StringBuilder();
-        try ( Scanner fileScanner = new Scanner(file)) {
-            while (fileScanner.hasNextLine()) {
-                builder.append(fileScanner.nextLine());
+    public void generateQueue() {
+        queue = new CustomPriorityQueue();
+
+        for (Entry<Character, Integer> entry : frequencies.getSlots()) {
+            if (entry != null) {
+                // Handles HashMap collision cases
+                while (entry.getNext() != null) {
+                    Node current = initializeNode(entry);
+                    queue.add(current);
+                    entry = entry.getNext();
+                }
+                Node current = initializeNode(entry);
+                queue.add(current);
             }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Creates a single node for the Huffman tree
+     *
+     * @param entry Key-Value pair from CustomHashMap entry set. Non-null.
+     * @return A Huffman tree node
+     */
+    public Node initializeNode(Entry<Character, Integer> entry) {
+        Node current = new Node();
+
+        current.character = entry.getKey();
+        current.frequency = entry.getValue();
+
+        current.left = null;
+        current.right = null;
+
+        return current;
+    }
+
+    /**
+     * Converts the original content into a binary string based on Huffman codes
+     * assigned for each character
+     *
+     * @param tree Huffman tree consisting of characters and their Huffman
+     * codes. For example: [Key: 'r' --- Value: "01001"]
+     */
+    public void nodesToBinary(HuffmanTree tree) {
+        StringBuilder binaryStringBuilder = new StringBuilder();
+        CustomHashMap<Character, String> codeTree;
+        codeTree = tree.assignCodes(new CustomHashMap<>(), tree.root, "");
+
+        char[] originalContent = content.toCharArray();
+
+        for (char character : originalContent) {
+            binaryStringBuilder.append(codeTree.get(character));
         }
 
-        content = builder.toString();
+        this.codeString = binaryStringBuilder.toString();
     }
 
     /**
-     * Compresses the binary string into bytes
+     * Compresses the whole binary string into an array of bytes by building
+     * sub-strings of length 8 and converting each of them into bytes.
      */
     public void compress() {
-        String toCompress = treeAsString + codeString;
+        // Helps to separate the Huffman tree string representation from the
+        // actual content in decoding
+        String separator = "111111111";
+        String toCompress = treeAsString + separator + codeString;
         compressed = new byte[(toCompress.length() / 8) + 1];
         StringBuilder sb = new StringBuilder();
         int j = 0;
         for (int i = 0; i < toCompress.length(); i++) {
             sb.append(toCompress.charAt(i));
             if (sb.length() == 8) {
-                compressed[j] = getByteValue(sb.toString());
-
+                compressed[j] = toByte(sb.toString());
                 j++;
                 sb = new StringBuilder();
             }
         }
 
+        // Handles the last sub-string that may not be length of 8 characters.
         while (sb.length() < 8) {
             sb.append("0");
         }
-        compressed[j] = getByteValue(sb.toString());
-
+        compressed[j] = toByte(sb.toString());
     }
 
-    public byte getByteValue(String binaryString) {
-        int currentValue = 128;
+    /**
+     * Converts a binary string into equivalent byte value. With the help of
+     * this 8 bits can be written into a file as a single byte, instead of 8
+     * separate bytes (normally 1 character = 1 byte).
+     *
+     * @param binaryString String of 0s and 1s. Length of 8 (for example
+     * "00110011")
+     * @return A single byte equivalent to the binary string given as a
+     * parameter ("00110011" = 51)
+     */
+    public byte toByte(String binaryString) {
+        int initialValue = 128;
+        int currentValue = initialValue;
         int result = 0;
 
         for (int i = 0; i <= 7; i++) {
@@ -131,70 +184,4 @@ public class HuffmanEncoder {
         return (byte) result;
     }
 
-    /**
-     * Creates a min-heap based on the frequencies of characters
-     */
-    public void generateQueue() {
-        queue = new CustomPriorityQueue();
-
-        for (Entry<Character, Integer> entry : frequencies.getSlots()) {
-            if (entry != null) {
-                while (entry.getNext() != null) {
-                    Node current = initializeNode(entry);
-                    queue.add(current);
-                    entry = entry.getNext();
-                }
-                Node current = initializeNode(entry);
-                queue.add(current);
-            }
-        }
-    }
-    
-    public Node initializeNode(Entry<Character, Integer> entry) {
-        Node current = new Node();
-        
-        current.character = entry.getKey();
-        current.frequency = entry.getValue();
-        
-        current.left = null;
-        current.right = null;
-        
-        return current;
-    }
-
-    /**
-     * Converts the original text to a binary string based on Huffman codes of
-     * each character
-     *
-     * @param tree Huffman tree consisting of characters and their Huffman codes
-     */
-    public void toCodeString(HuffmanTree tree) {
-        StringBuilder codeStringBuilder = new StringBuilder();
-        CustomHashMap<Character, String> codeTree = tree.assignCodes(new CustomHashMap<>(), tree.root, "");
-
-        char[] originalContent = content.toCharArray();
-
-        for (char character : originalContent) {
-            codeStringBuilder.append(codeTree.get(character));
-        }
-
-        this.codeString = codeStringBuilder.toString();
-
-    }
-
-    /**
-     *
-     * @return returns the min-heap
-     */
-    public CustomPriorityQueue getQueue() {
-        return this.queue;
-    }
-
-    public String getContent() {
-        return this.content;
-    }
-
-    public CustomHashMap<Character, Integer> getFrequencies() {
-        return this.frequencies;
-    }
 }

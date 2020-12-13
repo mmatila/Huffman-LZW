@@ -42,13 +42,12 @@ public class HuffmanTree {
     }
 
     /**
-     * Assigns each character a Huffman code by traversing the Huffman tree from
-     * the root
+     * Assigns each character a Huffman code by traversing the Huffman tree from the root
      *
-     * @param huffmanCodes List of characters and their Huffman codes
+     * @param huffmanCodes Map of characters and their Huffman codes
      * @param root Root of the Huffman tree to be traversed
-     * @param code The actual Huffman code of a character
-     * @return List of characters and their Huffman codes
+     * @param code The current Huffman code of a character
+     * @return Map of characters and their Huffman codes
      */
     public CustomHashMap<Character, String> assignCodes(CustomHashMap<Character, String> huffmanCodes, Node root, String code) {
         if (root.left == null && root.right == null) {
@@ -65,6 +64,13 @@ public class HuffmanTree {
         return huffmanCodes;
     }
     
+    /**
+     * Converts the Huffman tree into a single string by traversing it recursively in post-order. This needed to store the tree in the encoded file.
+     * 
+     * @param currentNode Currently pointed Huffman tree node
+     * @param treeAsString Current representation of the Huffman tree string
+     * @return Current representation of the Huffman tree string
+     */
     public String toString(Node currentNode, String treeAsString) {
         if (currentNode.left != null && currentNode.right != null) {
             treeAsString += "0";
@@ -79,6 +85,7 @@ public class HuffmanTree {
         while (bits.length() < 8) {
             bits = "0" + bits;
         }
+        
         return treeAsString += bits;
     }
 
