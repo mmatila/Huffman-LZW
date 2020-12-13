@@ -64,8 +64,8 @@ public class HuffmanEncoder {
 //        now = System.currentTimeMillis();
         toCodeString(tree);
         treeAsString = tree.toString(tree.root, "") + "111111111";
+        System.out.println(treeAsString);
         compress();
-        System.out.println(Arrays.toString(compressed));
 //        System.out.println("compress() took: " + (System.currentTimeMillis() - now) + " ms");
 //        now = System.currentTimeMillis();
         Writer writer = new Writer(compressed);
@@ -116,8 +116,6 @@ public class HuffmanEncoder {
      */
     public void compress() {
         String toCompress = treeAsString + codeString;
-        System.out.println(toCompress.length());
-        System.out.println(toCompress);
         compressed = new byte[(toCompress.length() / 8) + 1];
         StringBuilder sb = new StringBuilder();
         int j = 0;
