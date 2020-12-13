@@ -61,7 +61,7 @@ public class HuffmanTree {
         if (root.right != null) {
             assignCodes(huffmanCodes, root.right, code + "1");
         }
-
+        
         return huffmanCodes;
     }
     

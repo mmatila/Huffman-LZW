@@ -16,7 +16,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        HuffmanDecoder hd = new HuffmanDecoder(new File("t.HuffmanCompressed.bin"));
+        HuffmanDecoder hd = new HuffmanDecoder(new File("test.HuffmanCompressed.bin"));
         hd.decompress();
 //        UI userInterface = new UI();
 //        userInterface.run();
