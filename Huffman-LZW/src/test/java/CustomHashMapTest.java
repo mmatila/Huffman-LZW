@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import huffmanlzw.ds.CustomHashMap;
+import huffmanlzw.datastructures.CustomHashMap;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

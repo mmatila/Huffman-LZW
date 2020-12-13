@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw.encoders;
+package huffmanlzw.huffman;
 
-import huffmanlzw.ds.HuffmanTree;
-import huffmanlzw.ds.Node;
-import huffmanlzw.Writer;
-import huffmanlzw.ds.CustomHashMap;
-import huffmanlzw.ds.CustomPriorityQueue;
-import huffmanlzw.ds.Entry;
+import huffmanlzw.datastructures.HuffmanTree;
+import huffmanlzw.datastructures.Node;
+import huffmanlzw.utils.Writer;
+import huffmanlzw.datastructures.CustomHashMap;
+import huffmanlzw.datastructures.CustomPriorityQueue;
+import huffmanlzw.datastructures.Entry;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -26,11 +25,8 @@ public class HuffmanEncoder {
     private String content;
     private String codeString;
     private byte[] compressed;
-    private byte[] compressedTree;
-    private long now;
     private String treeAsString = "";
 
-    // Frequencies mean the number of times a character appears in the given file
     private CustomHashMap<Character, Integer> frequencies;
     private CustomPriorityQueue queue;
 
@@ -48,34 +44,20 @@ public class HuffmanEncoder {
      * Method that handles the whole encoding
      */
     public void execute() throws IOException {
-//        now = System.currentTimeMillis();
         contentToString();
-//        System.out.println("contentToString() took: " + (System.currentTimeMillis() - now) + " ms");
-//        now = System.currentTimeMillis();
         generateFrequencies();
-//        System.out.println("generateFrequencies() took: " + (System.currentTimeMillis() - now) + " ms");
-//        now = System.currentTimeMillis();
         generateQueue();
-//        System.out.println("generateQueue() took: " + (System.currentTimeMillis() - now) + " ms");
-//        now = System.currentTimeMillis();
         HuffmanTree tree = new HuffmanTree(getQueue());
         tree.generate();
-//        System.out.println("tree.generate() took: " + (System.currentTimeMillis() - now) + " ms");
-//        now = System.currentTimeMillis();
         toCodeString(tree);
         treeAsString = tree.toString(tree.root, "") + "111111111";
         System.out.println(treeAsString);
         compress();
-//        System.out.println("compress() took: " + (System.currentTimeMillis() - now) + " ms");
-//        now = System.currentTimeMillis();
         Writer writer = new Writer(compressed);
         String original = file.getName();
         String newName = "";
         newName = original.replaceFirst("[.][^.]+$", "");
         writer.writeHuffman(newName + ".HuffmanCompressed.bin");
-//        System.out.println("writer.writeHuffman() took: " + (System.currentTimeMillis() - now) + " ms");
-//        now = System.currentTimeMillis();
-//        tree.print();
     }
 
     /**
@@ -158,28 +140,26 @@ public class HuffmanEncoder {
         for (Entry<Character, Integer> entry : frequencies.getSlots()) {
             if (entry != null) {
                 while (entry.getNext() != null) {
-                    Node current = new Node();
-
-                    current.character = entry.getKey();
-                    current.frequency = entry.getValue();
-
-                    current.left = null;
-                    current.right = null;
-
+                    Node current = initializeNode(entry);
                     queue.add(current);
                     entry = entry.getNext();
                 }
-                Node current = new Node();
-
-                current.character = entry.getKey();
-                current.frequency = entry.getValue();
-
-                current.left = null;
-                current.right = null;
-
+                Node current = initializeNode(entry);
                 queue.add(current);
             }
         }
+    }
+    
+    public Node initializeNode(Entry<Character, Integer> entry) {
+        Node current = new Node();
+        
+        current.character = entry.getKey();
+        current.frequency = entry.getValue();
+        
+        current.left = null;
+        current.right = null;
+        
+        return current;
     }
 
     /**
@@ -191,8 +171,6 @@ public class HuffmanEncoder {
     public void toCodeString(HuffmanTree tree) {
         StringBuilder codeStringBuilder = new StringBuilder();
         CustomHashMap<Character, String> codeTree = tree.assignCodes(new CustomHashMap<>(), tree.root, "");
-//        System.out.println("assignCodes() took: " + (System.currentTimeMillis() - now) + " ms");
-//        now = System.currentTimeMillis();
 
         char[] originalContent = content.toCharArray();
 
@@ -202,8 +180,6 @@ public class HuffmanEncoder {
 
         this.codeString = codeStringBuilder.toString();
 
-//        System.out.println("turning original contents into a binary string: " + (System.currentTimeMillis() - now) + " ms");
-//        now = System.currentTimeMillis();
     }
 
     /**

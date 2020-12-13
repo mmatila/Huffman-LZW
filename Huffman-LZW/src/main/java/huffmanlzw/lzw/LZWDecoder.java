@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw.decoders;
+package huffmanlzw.lzw;
 
-import huffmanlzw.ds.CustomArrayList;
-import huffmanlzw.ds.CustomHashMap;
+import huffmanlzw.datastructures.CustomArrayList;
+import huffmanlzw.datastructures.CustomHashMap;
 
 /**
  *

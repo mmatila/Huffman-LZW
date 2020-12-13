@@ -1,9 +1,9 @@
 
-import huffmanlzw.ds.CustomHashMap;
-import huffmanlzw.ds.CustomPriorityQueue;
-import huffmanlzw.encoders.HuffmanEncoder;
-import huffmanlzw.ds.HuffmanTree;
-import huffmanlzw.ds.Node;
+import huffmanlzw.datastructures.CustomHashMap;
+import huffmanlzw.datastructures.CustomPriorityQueue;
+import huffmanlzw.huffman.HuffmanEncoder;
+import huffmanlzw.datastructures.HuffmanTree;
+import huffmanlzw.datastructures.Node;
 import java.io.File;
 import java.io.FileWriter;
 import org.junit.After;

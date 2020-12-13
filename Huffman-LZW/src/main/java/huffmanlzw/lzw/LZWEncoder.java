@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw.encoders;
+package huffmanlzw.lzw;
 
-import huffmanlzw.ds.CustomArrayList;
-import huffmanlzw.Writer;
-import huffmanlzw.ds.CustomHashMap;
+import huffmanlzw.datastructures.CustomArrayList;
+import huffmanlzw.utils.Writer;
+import huffmanlzw.datastructures.CustomHashMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;

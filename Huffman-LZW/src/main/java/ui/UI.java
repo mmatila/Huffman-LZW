@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw;
+package ui;
 
-import huffmanlzw.encoders.HuffmanEncoder;
+import huffmanlzw.huffman.HuffmanEncoder;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -42,9 +42,9 @@ public class UI {
     public void printOptions(boolean isDefault) {
         System.out.println("\nWhat would you like to do? 'exit' exits the program");
         System.out.println("\t1. Compress a file using Huffman encoding");
-        System.out.println("\t2. Compress a file using Lempel-Ziv-Welch encoding !!! (CAN BE RUN FROM MAIN)");
-        System.out.println("\t3. Decompress a file using Huffman decoding !!! (NOT IMPLEMENTED YET) !!!");
-        System.out.println("\t4. Decompress a file using Lempel-Ziv-Welch decoding !!! (CAN BE RUN FROM MAIN) !!!\n");
+        System.out.println("\t2. Compress a file using Lempel-Ziv-Welch encoding");
+        System.out.println("\t3. Decompress a file using Huffman decoding");
+        System.out.println("\t4. Decompress a file using Lempel-Ziv-Welch decoding\n");
         if (isDefault) {
             System.out.println("Invalid command\n");
         }

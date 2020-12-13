@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffmanlzw.decoders;
+package huffmanlzw.huffman;
 
-import huffmanlzw.ds.CustomHashMap;
+import huffmanlzw.datastructures.CustomHashMap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,9 +17,9 @@ import java.nio.file.Files;
 public class HuffmanDecoder {
 
     private File file;
-    StringBuilder sb;
+    private StringBuilder sb;
     private String content;
-    String tree;
+    private String tree;
     private CustomHashMap lookupTable;
 
     public HuffmanDecoder(File file) {
@@ -29,14 +29,11 @@ public class HuffmanDecoder {
     public void decompress() throws IOException {
         contentToString();
         System.out.println(content);
-        String tree = extractTree();
-        System.out.println(tree);
+        tree = extractTree();
         lookupTable = new CustomHashMap<>();
         buildMapping(tree, 0, "");
-
-        // Jump over tree and 9-bit separator
+        
         int i = tree.length() + 9;
-
         System.out.println(mapBinaryStr(content.substring(i)));
     }
 
