@@ -9,6 +9,7 @@ import huffmanlzw.datastructures.CustomArrayList;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
@@ -17,9 +18,11 @@ import java.io.IOException;
 public class Writer {
 
     private byte[] compressedArray;
-    private String fileName;
     private CustomArrayList<Integer> compressedList;
+    private String decompressed;
+    private String fileName;
     private FileOutputStream fos;
+    private PrintWriter pw;
 
     public Writer(byte[] compressed, String fileName) throws IOException {
         this.compressedArray = compressed;
@@ -30,12 +33,24 @@ public class Writer {
         this.compressedList = compressedList;
     }
 
-    public void writeHuffman() throws IOException {
+    public Writer(String decompressed, String fileName) {
+        this.decompressed = decompressed;
+        this.fileName = fileName;
+    }
+
+    public void writeCompressedHuffman() throws IOException {
         String newName = fileName.replaceFirst("[.][^.]+$", "") + ".huff";
         fos = new FileOutputStream(newName);
         fos.write(compressedArray);
         fos.close();
+    }
 
+    public void writeDecompressedHuffman() throws IOException {
+        System.out.println(decompressed);
+        String newName = fileName.substring(0, fileName.length() - 5);
+        pw = new PrintWriter(newName);
+        pw.println(decompressed);
+        pw.close();
     }
 
     public void writeLZW() throws FileNotFoundException, IOException {

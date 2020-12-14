@@ -54,7 +54,7 @@ public class HuffmanEncoder {
         this.treeAsString = tree.toString(tree.root, "");
         compress();
         Writer writer = new Writer(compressed, file.getName());
-        writer.writeHuffman();
+        writer.writeCompressedHuffman();
     }
 
     /**
@@ -161,9 +161,9 @@ public class HuffmanEncoder {
     }
 
     /**
-     * Converts a binary string into equivalent byte value. With the help of
-     * this 8 bits can be written into a file as a single byte, instead of 8
-     * separate bytes (normally 1 character = 1 byte).
+     * Converts a binary string ("10101010" etc.) into equivalent byte value.
+     * With the help of this 8 bits can be written into a file as a single byte,
+     * instead of 8 separate bytes (normally 1 character = 1 byte).
      *
      * @param binaryString String of 0s and 1s. Length of 8 (for example
      * "00110011")

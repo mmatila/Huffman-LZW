@@ -7,6 +7,7 @@ package huffmanlzw.huffman;
 
 import huffmanlzw.datastructures.CustomHashMap;
 import huffmanlzw.utils.Reader;
+import huffmanlzw.utils.Writer;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,6 +23,7 @@ public class HuffmanDecoder {
     private String content;
     private String tree;
     private CustomHashMap lookupTable;
+    private String decompressed;
 
     /**
      * Constructor. Initializes a new Reader used to read the file given as a
@@ -32,6 +34,7 @@ public class HuffmanDecoder {
     public HuffmanDecoder(File file) {
         this.file = file;
         this.reader = new Reader(file);
+        this.lookupTable = new CustomHashMap<String, Integer>();
     }
 
     /**
@@ -41,12 +44,12 @@ public class HuffmanDecoder {
      */
     public void decompress() throws IOException {
         this.content = reader.compressedFileToString();
-        tree = extractTree();
-        lookupTable = new CustomHashMap<String, Integer>();
+        this.tree = extractTree();
         buildLookupTable(tree, 0, "");
-
-        int i = tree.length() + 9;
-        System.out.println(mapContent(content.substring(i)));
+        this.content = content.substring(tree.length() + 9);
+        this.decompressed = mapContent(content);
+        Writer writer = new Writer(decompressed, file.getName());
+        writer.writeDecompressedHuffman();
     }
 
     /**
@@ -56,7 +59,7 @@ public class HuffmanDecoder {
      * node and the following 8 bits are it's corresponding character written in
      * binary
      *
-     * @return
+     * @return String representation of a Huffman tree
      */
     public String extractTree() {
         int i = 0;
@@ -69,14 +72,11 @@ public class HuffmanDecoder {
                     i++;
                 }
 
-                // Separator is found. Builds the tree string again and removes
-                // the 8-bit separator from it
+                // Separator is found. Builds the tree string again and stops
+                // at the index where separator starts
                 if (character.equals("11111111")) {
-                    sb = new StringBuilder();
-                    for (int j = 0; j < i - 9; j++) {
-                        sb.append(content.charAt(j));
-                    }
-                    return sb.toString();
+                    int separatorIndex = i - 9;
+                    return buildWithoutSeparator(content, separatorIndex);
                 }
             } else {
                 i++;
@@ -84,7 +84,34 @@ public class HuffmanDecoder {
         }
     }
 
-    
+    /**
+     * Returns the string representation of a Huffman tree without the separator
+     *
+     * @param content Huffman tree, separator and file contents in a binary
+     * string form
+     * @param separatorIndex Beginning index of the separator that separates the
+     * Huffman tree and file contents
+     * @return String representation of a Huffman tree
+     */
+    public String buildWithoutSeparator(String content, int separatorIndex) {
+        sb = new StringBuilder();
+        for (int j = 0; j < separatorIndex; j++) {
+            sb.append(content.charAt(j));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Builds a HashMap lookup table with the help of the extracted Huffman
+     * tree. Contains key-value pairs of Huffman codes and their corresponding
+     * integer values.
+     *
+     * @param tree String representation of a Huffman tree
+     * @param i Pointer for traversing the Huffman tree
+     * @param path Current traversed path. Also the same as current Huffman code
+     * @return HashMap containing key-value pairs of Huffman codes and their
+     * corresponding integer values.
+     */
     public int buildLookupTable(String tree, int i, String path) {
         char current = tree.charAt(i);
         i++;
@@ -105,24 +132,33 @@ public class HuffmanDecoder {
         return i;
     }
 
-    public String mapContent(String binStr) {
-        String subStr = "";
+    /**
+     * Builds the final decompressed string
+     *
+     * @param contentToMap Compressed file contents in a binary string form
+     * @return Decompressed string. Should be the same as the contents of the
+     * original file before compressing
+     */
+    public String mapContent(String contentToMap) {
+        String huffmanCode = "";
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < binStr.length(); i++) {
-            subStr += binStr.charAt(i);
-            if (lookupTable.containsKey(subStr)) {
-                builder.append((char) (int) lookupTable.get(subStr));
-                subStr = "";
+        for (int i = 0; i < contentToMap.length(); i++) {
+            huffmanCode += contentToMap.charAt(i);
+            System.out.println(huffmanCode);
+            if (lookupTable.containsKey(huffmanCode)) {
+                // Converts the Huffman code into a character
+                builder.append((char) (int) lookupTable.get(huffmanCode));
+                huffmanCode = "";
             }
         }
         return builder.toString();
     }
 
     /**
-     * Converts a binary string into equivalent byte value. With the help of
-     * this 8 bits can be written into a file as a single byte, instead of 8
-     * separate bytes (normally 1 character = 1 byte).
+     * Converts a binary string ("10101010" etc.) into equivalent byte value.
+     * With the help of this 8 bits can be written into a file as a single byte,
+     * instead of 8 separate bytes (normally 1 character = 1 byte).
      *
      * @param binaryString String of 0s and 1s. Length of 8 (for example
      * "00110011")
