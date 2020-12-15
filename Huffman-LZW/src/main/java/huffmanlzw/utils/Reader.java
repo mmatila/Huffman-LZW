@@ -5,6 +5,7 @@
  */
 package huffmanlzw.utils;
 
+import huffmanlzw.datastructures.CustomArrayList;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -51,5 +52,27 @@ public class Reader {
             System.out.println("File not found");
         }
         return sb.toString();
+    }
+
+    /**
+     * Forms a list of Integers (LZW "codes")
+     *
+     * @return List of LZW codes
+     */
+    public CustomArrayList<Integer> compressedFileToList() {
+        CustomArrayList<Integer> compressed = new CustomArrayList<>();
+        
+        try {
+            byte[] bytes = Files.readAllBytes(file.toPath());
+
+            for (byte b : bytes) {
+                compressed.add((int) b);
+            }
+
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+        
+        return compressed;
     }
 }

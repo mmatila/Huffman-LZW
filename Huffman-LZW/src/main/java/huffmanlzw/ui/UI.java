@@ -82,14 +82,14 @@ public class UI {
     }
     
     public void handleTwo() throws IOException {
-        HuffmanDecoder hd = new HuffmanDecoder(new File("test.huff"));
+        HuffmanDecoder hd = new HuffmanDecoder(new File("t.huff"));
         hd.decompress();
     }
     
     public void handleThree() throws IOException {
-        LZWEncoder e = new LZWEncoder(new File("test.txt"));
+        LZWEncoder e = new LZWEncoder(new File("t.txt"));
         e.execute();
-        LZWDecoder d = new LZWDecoder(e.getCompressed());
+        LZWDecoder d = new LZWDecoder(new File("lzwCompressed.txt"));
         d.execute();
     }
     

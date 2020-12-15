@@ -29,6 +29,11 @@ public class Writer {
         this.fileName = fileName;
     }
 
+    /**
+     * Constructor
+     *
+     * @param compressedList List of LZW codes
+     */
     public Writer(CustomArrayList<Integer> compressedList) {
         this.compressedList = compressedList;
     }
@@ -46,21 +51,21 @@ public class Writer {
     }
 
     public void writeDecompressedHuffman() throws IOException {
-        System.out.println(decompressed);
         String newName = fileName.substring(0, fileName.length() - 5);
         pw = new PrintWriter(newName);
-        pw.println(decompressed);
+        pw.write(decompressed);
         pw.close();
     }
 
-    public void writeLZW() throws FileNotFoundException, IOException {
-        fos = new FileOutputStream("lzwCompressed.txt");
-
-        for (int i = 0; i <= compressedList.size(); i++) {
-            fos.write(compressedList.indexOf(i));
+    public void writeCompressedLZW() throws FileNotFoundException, IOException {
+        byte[] compressed = new byte[compressedList.size()];
+        for (int i = 0; i < compressedList.size(); i++) {
+            compressed[i] = (byte) (int) compressedList.get(i);
         }
-
+        fos = new FileOutputStream("lzwCompressed.txt");
+        fos.write(compressed);
         fos.close();
+
     }
 
 }

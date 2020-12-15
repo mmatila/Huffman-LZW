@@ -7,6 +7,8 @@ package huffmanlzw.lzw;
 
 import huffmanlzw.datastructures.CustomArrayList;
 import huffmanlzw.datastructures.CustomHashMap;
+import huffmanlzw.utils.Reader;
+import java.io.File;
 
 /**
  *
@@ -14,17 +16,22 @@ import huffmanlzw.datastructures.CustomHashMap;
  */
 public class LZWDecoder {
 
+    private Reader reader;
     private CustomArrayList<Integer> compressed;
     private CustomHashMap<Integer, String> dictionary;
     private int dictionarySize;
     private String decompressed;
 
-    public LZWDecoder(CustomArrayList<Integer> compressed) {
-        this.compressed = compressed;
-        this.dictionary = buildDecodingDictionary();
+    public LZWDecoder(File file) {
+        this.reader = new Reader(file);
+        this.compressed = reader.compressedFileToList();
     }
 
+    /**
+     * Method that handles the whole flow of decoding/decompressing
+     */
     public void execute() {
+        this.dictionary = buildDecodingDictionary();
         decompress();
     }
 
@@ -50,7 +57,7 @@ public class LZWDecoder {
      */
     public void decompress() {
         StringBuilder result = new StringBuilder();
-        String first = "" + (char) (int) compressed.remove(0);
+        String first = "" + (char) (int) compressed.get(0);
         result.append(first);
         for (int i = 1; i < compressed.size(); i++) {
             String entry;
@@ -68,8 +75,6 @@ public class LZWDecoder {
 
             first = entry;
         }
-
         decompressed = result.toString();
-        System.out.println(decompressed);
     }
 }

@@ -28,21 +28,20 @@ public class LZWEncoder {
     public LZWEncoder(File fileToCompress) {
         this.fileToCompress = fileToCompress;
         this.reader = new Reader(fileToCompress);
-        this.dictionary = buildEncodingDictionary();
         this.result = new CustomArrayList<>();
     }
 
     /**
-     * Handles all the method calls because for now they're mostly type "void"
-     * instead of calling each other
+     * Method that handles the whole flow of the encoding/compressing
      *
      * @throws IOException
      */
     public void execute() throws IOException {
         uncompressed = reader.fileToString();
+        this.dictionary = buildEncodingDictionary();
         compress();
         Writer writer = new Writer(result);
-        writer.writeLZW();
+        writer.writeCompressedLZW();
     }
 
     /**
@@ -51,18 +50,16 @@ public class LZWEncoder {
      * from 256
      */
     public void compress() {
-        String first = ""; // Represents the first input character
+        String first = "";
         char[] characters = uncompressed.toCharArray();
 
-        // i is 4 because there's a null in the beginning of the char array for some reason
         for (int i = 0; i < characters.length; i++) {
             String current = first + characters[i];
-//            System.out.println(current);
             if (dictionary.containsKey(current)) {
                 first = current;
             } else {
                 result.add(dictionary.get(first));
-                dictionary.put(current, dictionarySize); // new character pair/group added to dictionary
+                dictionary.put(current, dictionarySize);
                 dictionarySize++;
                 first = "" + characters[i];
             }
@@ -90,6 +87,10 @@ public class LZWEncoder {
         return dictionary;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public CustomArrayList<Integer> getCompressed() {
         return this.result;
     }

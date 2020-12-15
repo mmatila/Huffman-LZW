@@ -14,6 +14,10 @@ public class HuffmanTree {
     public Node root;
     private CustomPriorityQueue queue;
 
+    /**
+     * Constructor
+     * @param queue Min-heap based on character frequencies 
+     */
     public HuffmanTree(CustomPriorityQueue queue) {
         this.queue = queue;
     }
@@ -86,9 +90,13 @@ public class HuffmanTree {
             bits = "0" + bits;
         }
         
-        return treeAsString += bits;
+        return treeAsString + bits;
     }
 
+    /**
+     * 
+     * @return Root of the tree
+     */
     public Node getRoot() {
         return this.root;
     }

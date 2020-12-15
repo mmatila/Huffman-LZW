@@ -145,7 +145,6 @@ public class HuffmanDecoder {
 
         for (int i = 0; i < contentToMap.length(); i++) {
             huffmanCode += contentToMap.charAt(i);
-            System.out.println(huffmanCode);
             if (lookupTable.containsKey(huffmanCode)) {
                 // Converts the Huffman code into a character
                 builder.append((char) (int) lookupTable.get(huffmanCode));
