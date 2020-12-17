@@ -6,8 +6,8 @@
 package huffmanlzw.huffman;
 
 import huffmanlzw.datastructures.CustomHashMap;
-import huffmanlzw.utils.Reader;
-import huffmanlzw.utils.Writer;
+import huffmanlzw.utils.FileReader;
+import huffmanlzw.utils.FileWriter;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ import java.io.IOException;
 public class HuffmanDecoder {
 
     private File file;
-    private Reader reader;
+    private FileReader reader;
     private StringBuilder sb;
     private String content;
     private String tree;
@@ -33,7 +33,7 @@ public class HuffmanDecoder {
      */
     public HuffmanDecoder(File file) {
         this.file = file;
-        this.reader = new Reader(file);
+        this.reader = new FileReader(file);
         this.lookupTable = new CustomHashMap<String, Integer>();
     }
 
@@ -48,7 +48,7 @@ public class HuffmanDecoder {
         buildLookupTable(tree, 0, "");
         this.content = content.substring(tree.length() + 9);
         this.decompressed = mapContent(content);
-        Writer writer = new Writer(decompressed, file.getName());
+        FileWriter writer = new FileWriter(decompressed, file.getName());
         writer.writeDecompressedHuffman();
     }
 

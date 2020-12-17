@@ -6,8 +6,13 @@
 package huffmanlzw.utils;
 
 import huffmanlzw.datastructures.CustomArrayList;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.Reader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.Scanner;
 
@@ -15,11 +20,11 @@ import java.util.Scanner;
  *
  * @author mmatila
  */
-public class Reader {
+public class FileReader {
 
     private File file;
 
-    public Reader(File file) {
+    public FileReader(File file) {
         this.file = file;
     }
 
@@ -59,19 +64,35 @@ public class Reader {
      *
      * @return List of LZW codes
      */
-    public CustomArrayList<Integer> compressedFileToList() {
+    public CustomArrayList<Integer> compressedFileToList() throws IOException {
         CustomArrayList<Integer> compressed = new CustomArrayList<>();
+        BufferedReader br = null;
+		InputStream inputStream  = new FileInputStream("lzwCompressed.txt");
+		Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-16BE"); // The Charset UTF-16BE is used to read the 16-bit compressed file.
+	
+		br = new BufferedReader(inputStreamReader);
+		  
+		double value=0;
+		
+         // reads to the end of the stream 
+         while((value = br.read()) != -1)
+         {
+        	 compressed.add((int) value);
+         }
+         	
+         br.close();
         
-        try {
-            byte[] bytes = Files.readAllBytes(file.toPath());
-
-            for (byte b : bytes) {
-                compressed.add((int) b);
-            }
-
-        } catch (IOException e) {
-            System.out.println("File not found");
-        }
+        
+//        try {
+//            byte[] bytes = Files.readAllBytes(file.toPath());
+//
+//            for (byte b : bytes) {
+//                compressed.add((int) b);
+//            }
+//
+//        } catch (IOException e) {
+//            System.out.println("File not found");
+//        }
         
         return compressed;
     }

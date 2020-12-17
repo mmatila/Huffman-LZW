@@ -87,7 +87,7 @@ public class UI {
     }
     
     public void handleThree() throws IOException {
-        LZWEncoder e = new LZWEncoder(new File("t.txt"));
+        LZWEncoder e = new LZWEncoder(new File("hello.txt"));
         e.execute();
         LZWDecoder d = new LZWDecoder(new File("lzwCompressed.txt"));
         d.execute();

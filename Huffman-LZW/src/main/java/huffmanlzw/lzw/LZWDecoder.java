@@ -7,8 +7,10 @@ package huffmanlzw.lzw;
 
 import huffmanlzw.datastructures.CustomArrayList;
 import huffmanlzw.datastructures.CustomHashMap;
-import huffmanlzw.utils.Reader;
+import huffmanlzw.utils.FileReader;
+import huffmanlzw.utils.FileWriter;
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -16,23 +18,26 @@ import java.io.File;
  */
 public class LZWDecoder {
 
-    private Reader reader;
+    private FileReader reader;
     private CustomArrayList<Integer> compressed;
     private CustomHashMap<Integer, String> dictionary;
+    private int maxDictionarySize = 32768;
     private int dictionarySize;
     private String decompressed;
 
-    public LZWDecoder(File file) {
-        this.reader = new Reader(file);
+    public LZWDecoder(File file) throws IOException {
+        this.reader = new FileReader(file);
         this.compressed = reader.compressedFileToList();
     }
 
     /**
      * Method that handles the whole flow of decoding/decompressing
      */
-    public void execute() {
+    public void execute() throws IOException {
         this.dictionary = buildDecodingDictionary();
         decompress();
+        FileWriter writer = new FileWriter(decompressed, "lzwDecompressed.txt");
+        writer.writeDecompressedLZW();
     }
 
     /**
@@ -41,7 +46,7 @@ public class LZWDecoder {
      * @return Dictionary with the first 255 ASCII entries
      */
     public CustomHashMap<Integer, String> buildDecodingDictionary() {
-        dictionary = new CustomHashMap<>();
+        dictionary = new CustomHashMap<>(maxDictionarySize);
         dictionarySize = 256;
 
         for (int i = 0; i < 256; i++) {
@@ -69,9 +74,16 @@ public class LZWDecoder {
                 // For a case where compressing might have gone wrong
                 throw new IllegalArgumentException("Something went wrong decompressing the ASCII code: " + compressed.get(i));
             }
+            
 
+            
             result.append(entry);
             dictionary.put(dictionarySize++, first + entry.charAt(0));
+
+            
+            if (dictionary.size() >= maxDictionarySize) {
+                dictionary = buildDecodingDictionary();
+            }
 
             first = entry;
         }

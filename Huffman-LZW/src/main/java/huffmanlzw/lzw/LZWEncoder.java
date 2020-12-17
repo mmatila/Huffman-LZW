@@ -6,9 +6,9 @@
 package huffmanlzw.lzw;
 
 import huffmanlzw.datastructures.CustomArrayList;
-import huffmanlzw.utils.Writer;
+import huffmanlzw.utils.FileWriter;
 import huffmanlzw.datastructures.CustomHashMap;
-import huffmanlzw.utils.Reader;
+import huffmanlzw.utils.FileReader;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,15 +19,16 @@ import java.io.IOException;
 public class LZWEncoder {
 
     private File fileToCompress;
-    private Reader reader;
+    private FileReader reader;
     private String uncompressed;
     private CustomHashMap<String, Integer> dictionary;
     private CustomArrayList<Integer> result;
+    private int maxDictionarySize = 32768;
     private int dictionarySize;
 
     public LZWEncoder(File fileToCompress) {
         this.fileToCompress = fileToCompress;
-        this.reader = new Reader(fileToCompress);
+        this.reader = new FileReader(fileToCompress);
         this.result = new CustomArrayList<>();
     }
 
@@ -40,7 +41,7 @@ public class LZWEncoder {
         uncompressed = reader.fileToString();
         this.dictionary = buildEncodingDictionary();
         compress();
-        Writer writer = new Writer(result);
+        FileWriter writer = new FileWriter(result);
         writer.writeCompressedLZW();
     }
 
@@ -50,10 +51,10 @@ public class LZWEncoder {
      * from 256
      */
     public void compress() {
-        String first = "";
         char[] characters = uncompressed.toCharArray();
+        String first = "" + characters[0];
 
-        for (int i = 0; i < characters.length; i++) {
+        for (int i = 1; i < characters.length; i++) {
             String current = first + characters[i];
             if (dictionary.containsKey(current)) {
                 first = current;
@@ -62,6 +63,9 @@ public class LZWEncoder {
                 dictionary.put(current, dictionarySize);
                 dictionarySize++;
                 first = "" + characters[i];
+                if (dictionary.size() >= maxDictionarySize) {
+                    dictionary = buildEncodingDictionary();
+                }
             }
         }
 
@@ -77,7 +81,7 @@ public class LZWEncoder {
      * @return Dictionary with the first 255 ASCII entries
      */
     public CustomHashMap<String, Integer> buildEncodingDictionary() {
-        dictionary = new CustomHashMap<>();
+        dictionary = new CustomHashMap<>(maxDictionarySize);
         dictionarySize = 256;
 
         for (int i = 0; i < 256; i++) {

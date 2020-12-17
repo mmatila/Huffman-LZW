@@ -6,16 +6,18 @@
 package huffmanlzw.utils;
 
 import huffmanlzw.datastructures.CustomArrayList;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 /**
  *
  * @author mmatila
  */
-public class Writer {
+public class FileWriter {
 
     private byte[] compressedArray;
     private CustomArrayList<Integer> compressedList;
@@ -24,7 +26,7 @@ public class Writer {
     private FileOutputStream fos;
     private PrintWriter pw;
 
-    public Writer(byte[] compressed, String fileName) throws IOException {
+    public FileWriter(byte[] compressed, String fileName) throws IOException {
         this.compressedArray = compressed;
         this.fileName = fileName;
     }
@@ -34,11 +36,11 @@ public class Writer {
      *
      * @param compressedList List of LZW codes
      */
-    public Writer(CustomArrayList<Integer> compressedList) {
+    public FileWriter(CustomArrayList<Integer> compressedList) {
         this.compressedList = compressedList;
     }
 
-    public Writer(String decompressed, String fileName) {
+    public FileWriter(String decompressed, String fileName) {
         this.decompressed = decompressed;
         this.fileName = fileName;
     }
@@ -58,14 +60,31 @@ public class Writer {
     }
 
     public void writeCompressedLZW() throws FileNotFoundException, IOException {
-        byte[] compressed = new byte[compressedList.size()];
-        for (int i = 0; i < compressedList.size(); i++) {
-            compressed[i] = (byte) (int) compressedList.get(i);
-        }
-        fos = new FileOutputStream("lzwCompressed.txt");
-        fos.write(compressed);
-        fos.close();
+        BufferedWriter out = null;
+        String newName = "lzwCompressed.txt";
 
+        try {
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(newName), "UTF_16BE"));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            for (int i = 0; i < compressedList.size(); i++) {
+                out.write(compressedList.get(i));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        out.flush();
+        out.close();
+    }
+
+    public void writeDecompressedLZW() throws IOException {
+        pw = new PrintWriter(fileName);
+        pw.write(decompressed);
+        pw.close();
     }
 
 }

@@ -7,11 +7,11 @@ package huffmanlzw.huffman;
 
 import huffmanlzw.datastructures.HuffmanTree;
 import huffmanlzw.datastructures.Node;
-import huffmanlzw.utils.Writer;
+import huffmanlzw.utils.FileWriter;
 import huffmanlzw.datastructures.CustomHashMap;
 import huffmanlzw.datastructures.CustomPriorityQueue;
 import huffmanlzw.datastructures.Entry;
-import huffmanlzw.utils.Reader;
+import huffmanlzw.utils.FileReader;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class HuffmanEncoder {
 
     private File file;
-    private Reader reader;
+    private FileReader reader;
     private String content;
     private String codeString;
     private byte[] compressed;
@@ -37,7 +37,7 @@ public class HuffmanEncoder {
      */
     public HuffmanEncoder(File file) {
         this.file = file;
-        this.reader = new Reader(file);
+        this.reader = new FileReader(file);
     }
 
     /**
@@ -53,7 +53,7 @@ public class HuffmanEncoder {
         nodesToBinary(tree);
         this.treeAsString = tree.toString(tree.root, "");
         compress();
-        Writer writer = new Writer(compressed, file.getName());
+        FileWriter writer = new FileWriter(compressed, file.getName());
         writer.writeCompressedHuffman();
     }
 
