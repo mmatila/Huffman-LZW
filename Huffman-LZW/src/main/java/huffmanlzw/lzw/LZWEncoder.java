@@ -41,7 +41,7 @@ public class LZWEncoder {
         uncompressed = reader.fileToString();
         this.dictionary = buildEncodingDictionary();
         compress();
-        FileWriter writer = new FileWriter(result);
+        FileWriter writer = new FileWriter(result, fileToCompress.getName());
         writer.writeCompressedLZW();
     }
 
@@ -92,7 +92,7 @@ public class LZWEncoder {
     }
 
     /**
-     * 
+     * Getter
      * @return 
      */
     public CustomArrayList<Integer> getCompressed() {

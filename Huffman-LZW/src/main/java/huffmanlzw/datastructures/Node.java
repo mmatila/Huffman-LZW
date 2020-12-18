@@ -16,6 +16,11 @@ public class Node implements Comparable<Node> {
     public Node left;
     public Node right;
 
+    /**
+     * Constructor
+     * @param character Character
+     * @param frequency The count of a specific character
+     */
     public Node(char character, int frequency) {
         this.character = character;
         this.frequency = frequency;

@@ -36,8 +36,9 @@ public class FileWriter {
      *
      * @param compressedList List of LZW codes
      */
-    public FileWriter(CustomArrayList<Integer> compressedList) {
+    public FileWriter(CustomArrayList<Integer> compressedList, String fileName) {
         this.compressedList = compressedList;
+        this.fileName = fileName;
     }
 
     public FileWriter(String decompressed, String fileName) {
@@ -53,7 +54,7 @@ public class FileWriter {
     }
 
     public void writeDecompressedHuffman() throws IOException {
-        String newName = fileName.substring(0, fileName.length() - 5);
+        String newName = "huff." + fileName.substring(0, fileName.length() - 5) + ".txt";
         pw = new PrintWriter(newName);
         pw.write(decompressed);
         pw.close();
@@ -61,7 +62,7 @@ public class FileWriter {
 
     public void writeCompressedLZW() throws FileNotFoundException, IOException {
         BufferedWriter out = null;
-        String newName = "lzwCompressed.txt";
+        String newName = fileName.replaceFirst("[.][^.]+$", "") + ".lzw";
 
         try {
             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(newName), "UTF_16BE"));
@@ -82,7 +83,8 @@ public class FileWriter {
     }
 
     public void writeDecompressedLZW() throws IOException {
-        pw = new PrintWriter(fileName);
+        String newName = "lzw." + fileName.substring(0, fileName.length() - 4) + ".txt";
+        pw = new PrintWriter(newName);
         pw.write(decompressed);
         pw.close();
     }

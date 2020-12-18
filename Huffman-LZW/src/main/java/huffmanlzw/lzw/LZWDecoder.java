@@ -18,6 +18,7 @@ import java.io.IOException;
  */
 public class LZWDecoder {
 
+    private File file;
     private FileReader reader;
     private CustomArrayList<Integer> compressed;
     private CustomHashMap<Integer, String> dictionary;
@@ -26,6 +27,7 @@ public class LZWDecoder {
     private String decompressed;
 
     public LZWDecoder(File file) throws IOException {
+        this.file = file;
         this.reader = new FileReader(file);
         this.compressed = reader.compressedFileToList();
     }
@@ -36,7 +38,7 @@ public class LZWDecoder {
     public void execute() throws IOException {
         this.dictionary = buildDecodingDictionary();
         decompress();
-        FileWriter writer = new FileWriter(decompressed, "lzwDecompressed.txt");
+        FileWriter writer = new FileWriter(decompressed, file.getName());
         writer.writeDecompressedLZW();
     }
 
@@ -57,8 +59,8 @@ public class LZWDecoder {
     }
 
     /**
-     * The actual decompressing method that turns the compressed list of ASCII
-     * codes back into a string
+     * The actual decompressing method that turns the compressed list of
+     * ASCII/LZW codes back into a string
      */
     public void decompress() {
         StringBuilder result = new StringBuilder();
@@ -72,15 +74,12 @@ public class LZWDecoder {
                 entry = first + first.charAt(0);
             } else {
                 // For a case where compressing might have gone wrong
-                throw new IllegalArgumentException("Something went wrong decompressing the ASCII code: " + compressed.get(i));
+                throw new IllegalArgumentException("Something went wrong decompressing the code: " + compressed.get(i));
             }
-            
 
-            
             result.append(entry);
             dictionary.put(dictionarySize++, first + entry.charAt(0));
 
-            
             if (dictionary.size() >= maxDictionarySize) {
                 dictionary = buildDecodingDictionary();
             }

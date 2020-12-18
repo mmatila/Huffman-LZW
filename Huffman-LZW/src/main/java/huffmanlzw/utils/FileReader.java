@@ -44,6 +44,13 @@ public class FileReader {
         return builder.toString();
     }
 
+    /**
+     * Converts array of bytes into a single binary string. Used for Huffman
+     * decoding where a single byte might contain more or less than one Huffman
+     * code
+     *
+     * @return Binary string
+     */
     public String compressedFileToString() {
         StringBuilder sb = new StringBuilder();
         try {
@@ -66,34 +73,21 @@ public class FileReader {
      */
     public CustomArrayList<Integer> compressedFileToList() throws IOException {
         CustomArrayList<Integer> compressed = new CustomArrayList<>();
-        BufferedReader br = null;
-		InputStream inputStream  = new FileInputStream("lzwCompressed.txt");
-		Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-16BE"); // The Charset UTF-16BE is used to read the 16-bit compressed file.
-	
-		br = new BufferedReader(inputStreamReader);
-		  
-		double value=0;
-		
-         // reads to the end of the stream 
-         while((value = br.read()) != -1)
-         {
-        	 compressed.add((int) value);
-         }
-         	
-         br.close();
-        
-        
-//        try {
-//            byte[] bytes = Files.readAllBytes(file.toPath());
-//
-//            for (byte b : bytes) {
-//                compressed.add((int) b);
-//            }
-//
-//        } catch (IOException e) {
-//            System.out.println("File not found");
-//        }
-        
+        BufferedReader bReader = null;
+        InputStream inputStream = new FileInputStream(file.getName().replaceFirst("[.][^.]+$", "") + ".lzw");
+        Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-16BE");
+
+        bReader = new BufferedReader(inputStreamReader);
+
+        double value = 0;
+
+        // reads to the end of the stream 
+        while ((value = bReader.read()) != -1) {
+            compressed.add((int) value);
+        }
+
+        bReader.close();
+
         return compressed;
     }
 }
