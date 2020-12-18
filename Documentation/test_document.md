@@ -1,8 +1,12 @@
 # Test documentation
 
+## JUnit  
+
+- Data structures and end-to-end testing has been done using JUnit
+
 ## Jacoco
 
-<img src=https://github.com/mmatila/Huffman-LZW/blob/main/Documentation/images/jacoco_final.png width=400 />  
+<img src=https://github.com/mmatila/Huffman-LZW/blob/main/Documentation/images/jacoco_final.png />  
 
 ## 
 
@@ -37,7 +41,7 @@
 The values of the bars represent the compressing efficiency. For example the efficiency of Huffman on abc_small.txt is 79% because the compressed file is 79% smaller than
 the original file (original size (100%) - size compared to original (21%) from the chart above)  
 
-<img src=https://github.com/mmatila/Huffman-LZW/blob/main/Documentation/images/chart.png width=400 />  
+<img src=https://github.com/mmatila/Huffman-LZW/blob/main/Documentation/images/chart.png />  
 
 ## Testing materials  
 
