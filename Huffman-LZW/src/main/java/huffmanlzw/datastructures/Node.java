@@ -18,6 +18,7 @@ public class Node implements Comparable<Node> {
 
     /**
      * Constructor
+     *
      * @param character Character
      * @param frequency The count of a specific character
      */

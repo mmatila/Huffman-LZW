@@ -24,6 +24,7 @@ public class CustomHashMap<K, V> {
 
     /**
      * Constructor
+     *
      * @param capacity Capacity of the HashMap
      */
     public CustomHashMap(int capacity) {
@@ -32,6 +33,7 @@ public class CustomHashMap<K, V> {
 
     /**
      * Adds a key-value pair to the HashMap
+     *
      * @param key Key
      * @param value Value
      */
@@ -66,7 +68,9 @@ public class CustomHashMap<K, V> {
     }
 
     /**
-     * Returns a value from the HashMap that corresponds to the key given as a parameter. Null if key does not exist
+     * Returns a value from the HashMap that corresponds to the key given as a
+     * parameter. Null if key does not exist
+     *
      * @param key Key
      * @return value corresponding to the key
      */
@@ -85,6 +89,7 @@ public class CustomHashMap<K, V> {
 
     /**
      * Removes a key-value pair corresponding to the key given as a parameter.
+     *
      * @param key Key
      * @return Removed value. Null if key was not found
      */
@@ -115,6 +120,7 @@ public class CustomHashMap<K, V> {
 
     /**
      * Checks if the key given as a parameter exists in the HashMap
+     *
      * @param key Key
      * @return True if key exists. Otherwise false.
      */
@@ -123,8 +129,9 @@ public class CustomHashMap<K, V> {
             return false;
         }
         int index = getIndex(key);
-        if (index < 0)
+        if (index < 0) {
             index = -index;
+        }
         Entry<K, V> slot = slots[index];
 
         while (slot != null) {
@@ -137,17 +144,19 @@ public class CustomHashMap<K, V> {
     }
 
     /**
-     * Doubles the HashMap capacity. Needed to avoid large amounts of collisions.
+     * Doubles the HashMap capacity. Needed to avoid large amounts of
+     * collisions.
      */
     public void incrementCapacity() {
         Entry[] old = slots;
         slots = new Entry[size * 2];
         size = 0;
-        
+
         for (int i = 0; i < old.length; i++) {
             Entry<K, V> entry = old[i];
-            if (entry == null) 
+            if (entry == null) {
                 continue;
+            }
             while (entry.next != null) {
                 put(entry.key, entry.value);
                 entry = entry.next;
@@ -158,18 +167,21 @@ public class CustomHashMap<K, V> {
 
     /**
      * Returns the index corresponding to the key given as a parameter
+     *
      * @param key Key
      * @return Index corresponsing to the key. Defaults to 0
      */
     public int getIndex(K key) {
-        if (key == null)
+        if (key == null) {
             return 0;
+        }
         int index = key.hashCode() % slots.length;
         return index > 0 ? index : -index;
     }
 
     /**
      * Getter
+     *
      * @return Size of the HashMap
      */
     public int size() {
@@ -178,14 +190,16 @@ public class CustomHashMap<K, V> {
 
     /**
      * Getter
+     *
      * @return Capacity of the HashMap
      */
     public int capacity() {
         return slots.length;
     }
-    
+
     /**
      * Getter
+     *
      * @return The HashMap entryset. Includes null-values.
      */
     public Entry[] getSlots() {

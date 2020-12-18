@@ -21,9 +21,10 @@ public class CustomArrayList<T> {
         this.values = (T[]) new Object[80];
         this.size = 0;
     }
-    
+
     /**
      * Adds object given as a parameter to the list
+     *
      * @param value Object to be added to the list
      */
     public void add(T value) {
@@ -50,6 +51,7 @@ public class CustomArrayList<T> {
 
     /**
      * Checks if the list contains the value given as a parameter
+     *
      * @param value value to be checked
      * @return true is value is found, otherwise false
      */
@@ -65,14 +67,15 @@ public class CustomArrayList<T> {
 
     /**
      * Removes a value from the list
+     *
      * @param index index of the value to be removed
      * @return removed value
      */
     public T remove(int index) {
-        if (index < 0) {
+        if (index < 0 || index > this.size) {
             return null;
         }
-        
+
         moveLeft(size);
         size--;
         return values[index];
@@ -80,6 +83,7 @@ public class CustomArrayList<T> {
 
     /**
      * Moves all the values of the list one index to the left
+     *
      * @param from index of the first value to be moved
      */
     private void moveLeft(int from) {
@@ -89,7 +93,7 @@ public class CustomArrayList<T> {
     }
 
     /**
-     * 
+     *
      * @return number of values on the list
      */
     public int size() {
@@ -97,7 +101,9 @@ public class CustomArrayList<T> {
     }
 
     /**
-     *  Checks if a value exists in the index given as a parameter and returns it.
+     * Checks if a value exists in the index given as a parameter and returns
+     * it.
+     *
      * @param index index of the value
      * @return value in the given index. Otherwise an error
      */
@@ -111,7 +117,8 @@ public class CustomArrayList<T> {
     }
 
     /**
-     * Checks the index of the value given as a parameter 
+     * Checks the index of the value given as a parameter
+     *
      * @param value value to be checked
      * @return index of the given value
      */
@@ -124,14 +131,14 @@ public class CustomArrayList<T> {
 
         return -1;
     }
-    
+
     @Override
     public String toString() {
         String toReturn = "";
         for (T t : values) {
             toReturn += t;
         }
-        
+
         return toReturn;
     }
 }

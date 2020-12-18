@@ -90,12 +90,4 @@ public class LZWEncoder {
 
         return dictionary;
     }
-
-    /**
-     * Getter
-     * @return 
-     */
-    public CustomArrayList<Integer> getCompressed() {
-        return this.result;
-    }
 }

@@ -19,9 +19,11 @@ public class Entry<K, V> {
 
     /**
      * Constructor
+     *
      * @param key Key
      * @param value Value
-     * @param next Pointer to the next Entry. Represents a linked list -type of connection
+     * @param next Pointer to the next Entry. Represents a linked list -type of
+     * connection
      */
     public Entry(K key, V value, Entry<K, V> next) {
         this.key = key;

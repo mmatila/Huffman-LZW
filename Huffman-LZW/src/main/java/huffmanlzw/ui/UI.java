@@ -33,16 +33,16 @@ public class UI {
             choice = scanner.nextLine();
             switch (choice) {
                 case "1":
-                    handleOne();
+                    huffmanEncode();
                     break;
                 case "2":
-                    handleTwo();
+                    lzwEncode();
                     break;
                 case "3":
-                    handleThree();
+                    huffmanDecode();
                     break;
                 case "4":
-                    handleFour();
+                    lzwDecode();
                     break;
                 case "5":
                     testPerformance();
@@ -56,7 +56,7 @@ public class UI {
     }
 
 
-    public void handleOne() {
+    public void huffmanEncode() {
         System.out.print("\nName of the file to compress: ");
         String fileName = scanner.nextLine();
         String compressedFileName = generateCompressedFileName(fileName, ".huff");
@@ -75,7 +75,7 @@ public class UI {
         }
     }
     
-    public void handleTwo() throws IOException {
+    public void lzwEncode() throws IOException {
         System.out.print("\nName of the file to compress: ");
         String fileName = scanner.nextLine();
         String compressedFileName = generateCompressedFileName(fileName, ".lzw");
@@ -95,7 +95,7 @@ public class UI {
         }
     }
     
-    public void handleFour() {
+    public void lzwDecode() {
         System.out.print("\nName of the file to decompress: ");
         String fileName = scanner.nextLine();
         File toDecompress = new File(fileName);
@@ -112,7 +112,7 @@ public class UI {
         }
     }
     
-    public void handleThree() throws IOException {
+    public void huffmanDecode() throws IOException {
         System.out.print("\nName of the file to decompress: ");
         String fileName = scanner.nextLine();
         File toDecompress = new File(fileName);
@@ -133,15 +133,19 @@ public class UI {
         System.out.print("\nName of the file to use for performance testing: ");
         String fileName = scanner.nextLine();
         File toTest = new File(fileName);
- 
-        try {
-            System.out.println("\n --- HUFFMAN ---\n");
-            huffmanPerformance(toTest);
-            System.out.println("\n--- Lempel-Ziv-Welch ---\n");
-            lzwPerformance(toTest);
-            askToContinue();
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+        if (toTest.exists()) {            
+            try {
+                System.out.println("\n --- HUFFMAN ---\n");
+                huffmanPerformance(toTest);
+                System.out.println("\n--- Lempel-Ziv-Welch ---\n");
+                lzwPerformance(toTest);
+                askToContinue();
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+                printOptions(false);
+            }
+        } else {
+            System.out.println("Could not find file: " + fileName + "\n");
             printOptions(false);
         }
     }
@@ -211,7 +215,7 @@ public class UI {
             LZWDecoder decoder = new LZWDecoder(compressed);
             decoder.execute();
             end = System.currentTimeMillis();
-            System.out.println("Decoding took: " + (end - start) + " ms");
+            System.out.println("Decoding took: " + (end - start) + " ms\n");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -232,7 +236,7 @@ public class UI {
     }
 
     public void printEncodingStats(Long start, Long end, File before, File after) {  
-        System.out.println("\n----- Operation successful! -----\n");
+        System.out.println("\n----- Encoding successful! -----\n");
         System.out.println("Total time: " + (end - start) + "ms");
         System.out.println("Original size of the file: " + before.length() + " bytes");
         System.out.println("Compressed size of the file: " + after.length() + " bytes");
@@ -240,7 +244,7 @@ public class UI {
     }
     
     public void printDecodingStats(Long start, Long end) {
-        System.out.println("\n----- Operation successful! -----\n");
+        System.out.println("\n----- Decoding successful! -----\n");
         System.out.println("Total time: " + (end - start) + "ms\n");
     }
     

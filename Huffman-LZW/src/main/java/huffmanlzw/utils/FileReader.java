@@ -30,6 +30,7 @@ public class FileReader {
 
     /**
      * Forms a single string from the file contents
+     * @return File contents in the form of a string
      */
     public String fileToString() {
         StringBuilder builder = new StringBuilder();
@@ -67,9 +68,10 @@ public class FileReader {
     }
 
     /**
-     * Forms a list of Integers (LZW "codes")
+     * Forms a list of Integers (LZW "codes") in 16-bit format
      *
      * @return List of LZW codes
+     * @throws IOException
      */
     public CustomArrayList<Integer> compressedFileToList() throws IOException {
         CustomArrayList<Integer> compressed = new CustomArrayList<>();

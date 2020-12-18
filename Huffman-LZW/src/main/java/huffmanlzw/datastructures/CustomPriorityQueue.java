@@ -11,8 +11,8 @@ package huffmanlzw.datastructures;
  */
 public class CustomPriorityQueue {
 
-    Node[] table;
-    int size;
+    public Node[] table;
+    public int size;
 
     public CustomPriorityQueue() {
         this.table = new Node[255];
@@ -53,6 +53,10 @@ public class CustomPriorityQueue {
      * @return Node
      */
     public Node poll() {
+        if (size == 0) {
+            return null;
+        }
+        
         Node node = table[1];
 
         // Move last to top
