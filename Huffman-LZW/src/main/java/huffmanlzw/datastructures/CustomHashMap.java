@@ -169,7 +169,7 @@ public class CustomHashMap<K, V> {
      * Returns the index corresponding to the key given as a parameter
      *
      * @param key Key
-     * @return Index corresponsing to the key. Defaults to 0
+     * @return Index corresponding to the key. Defaults to 0
      */
     public int getIndex(K key) {
         if (key == null) {
@@ -200,7 +200,7 @@ public class CustomHashMap<K, V> {
     /**
      * Getter
      *
-     * @return The HashMap entryset. Includes null-values.
+     * @return The HashMap entry set. Includes null-values.
      */
     public Entry[] getSlots() {
         return this.slots;
