@@ -29,9 +29,48 @@ The use of Java's built-in data structures, such as HashMap, was prohibited. Bec
 - **HuffmanTree**  
   - Represents a Huffman tree used for Huffman encoding and decoding. Basically a binary tree of nodes built by using CustomPriorityQueue.  
 
-## Time and space complexity analysis  
+## Technique and time complexity analysis  
 
+### Huffman
 
+#### Technique
+
+Huffman coding assumes there's initial data that contains all the characters and their frequencies in the given file. A frequency of a character means the amount of times it appears in the text. It then uses this data to build a Huffman tree filled with nodes and assigns each character their equivalent Huffman code (prefix binary string) by traversing the tree recursively . To finish the encoding, the encoded file can now be written by using the Huffman codes to represent their equivalent characters.  
+
+Decompressing is generally speaking just translating the prefix codes into individual byte values. The structure of the Huffman tree used in encoding is stored in the encoded file and can be used to decode the file into it's original form.
+
+#### Time complexity
+
+The time complexity of the Huffman algorithm is **O(n log n)**. Each insertion to the min heap requires **O(log n)** and there's a total of **n** operations, one for each character.
+
+#### Building a Huffman tree
+```
+1. Create a node for each character-frequency pair and add it to a min heap
+2. While heap.length > 1
+    1. Poll two nodes and count the sum of their frequencies (= res)
+    2. Create new node with a frequency of res and set the summed nodes as it's children
+    3. Add the node to the heap
+3. Remaining node is the root of the Huffman tree  
+```
+
+### LZW  
+
+#### Technique
+
+LZW encodes data by referencing a dictionary. Each substring of the file can be represented as it's index in the dictionary which makes it very good for files that contain a lot of repetition. Initially the dictionary only contains all strings of length one. As the compression proceeds, substrings are added to the dictionary that can be then used for referencing.
+
+#### Time complexity
+
+Since the number of characters in a file is **n**, LZW algorithm has a time complexity of **O(n)**. Reading a character from a file, compressing and writing the compressed contens into a file all take time of **O(n)**. 
+
+#### Encoding ([source](https://en.wikipedia.org/wiki/Lempel%E2%80%93Ziv%E2%80%93Welch))
+```
+1. Initialize a dictionary with all strings of length one
+2. Find the longest string W from dictionary that matches the current input
+3. Output the dictionary index referencing to W and remove W from the input
+4. Add W followed by the next input symbol to the dictionary
+5. Go to step 2
+```
 
 ## What to improve?  
 
