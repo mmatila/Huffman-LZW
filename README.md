@@ -1,6 +1,6 @@
 # Huffman-LZW
 
-Course project for "Aineopintojen harjoitustyö: Tietorakenteet ja Algoritmit" at University of Helsinki.
+Course project for the "Data Structures Project course" (p2, 2020) at the University of Helsinki.
 
 ## Documentation
 [Project specification](https://github.com/mmatila/Huffman-LZW/blob/main/Documentation/definition.md)  
